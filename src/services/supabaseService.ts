@@ -67,15 +67,21 @@ export async function fetchPontosByProximity(
             Math.pow(ponto.longitude - longitude, 2)
           )
         }))
-        .sort((a: any, b: any) => a.distance - b.distance)
+        .sort((a, b) => (a as any).distance - (b as any).distance)
         .slice(0, limit);
     }
     
     // Convert id to string and ensure type compatibility
     return (data || []).map((ponto: any) => ({
-      ...ponto,
       id: ponto.id.toString(),
-      tipo: ponto.tipo as 'parque' | 'fonte' | 'abrigo'
+      nome: ponto.nome,
+      descricao: ponto.descricao,
+      tipo: ponto.tipo as 'parque' | 'fonte' | 'abrigo',
+      latitude: ponto.latitude,
+      longitude: ponto.longitude,
+      horario_funcionamento: ponto.horario_funcionamento,
+      cidade: ponto.cidade,
+      uf: ponto.uf
     }));
   } catch (error) {
     console.error('Erro ao buscar pontos próximos:', error);
