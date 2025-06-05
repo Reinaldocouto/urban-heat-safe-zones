@@ -9,8 +9,8 @@ import { useMapData } from '@/hooks/useMapData';
 import { calculateOptimalRoute, OptimizedRoute } from '@/services/routeService';
 import { getForecastByCoordinates, ForecastData } from '@/services/weatherService';
 import MapControls from './MapControls';
-import TemperatureDisplay from './TemperatureDisplay';
-import MapLegend from './MapLegend';
+import WeatherNotification from './WeatherNotification';
+import InteractiveMapArea from './InteractiveMapArea';
 import PointDetailsPanel from './PointDetailsPanel';
 import RouteInfoPanel from './RouteInfoPanel';
 
@@ -119,56 +119,12 @@ const MapView = () => {
   return (
     <div className="h-full flex flex-col lg:flex-row">
       <div className="flex-1 relative">
-        {/* Map Placeholder with enhanced information */}
-        <div className="w-full h-full bg-gradient-to-br from-blue-50 to-green-50 relative flex items-center justify-center">
-          <div className="text-center p-8 max-w-6xl">
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">
-              Mapa Inteligente de Pontos de Resfriamento
-            </h3>
-            <p className="text-gray-600 mb-2">Grande São Paulo - {pontos.length} pontos disponíveis</p>
-            
-            {currentWeather && (
-              <div className="bg-white rounded-lg p-4 mb-4 inline-block shadow-md">
-                <div className="flex items-center justify-center space-x-4">
-                  <span className="text-3xl">{currentWeather.icon}</span>
-                  <div className="text-left">
-                    <p className="font-semibold">{currentWeather.temperature}°C</p>
-                    <p className="text-sm text-gray-600">{currentWeather.condition}</p>
-                    <p className="text-xs">UV: {currentWeather.uv} | Umidade: {currentWeather.humidity}%</p>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl">
-              {pontos.slice(0, 20).map((point) => (
-                <div 
-                  key={point.id} 
-                  className={`bg-white p-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-all duration-200 border-2 ${
-                    selectedPoint?.id === point.id ? 'border-fiap-red bg-red-50' : 'border-transparent'
-                  }`}
-                  onClick={() => handlePointSelect(point)}
-                >
-                  <div className="flex items-center mb-2">
-                    <span className="text-2xl mr-2">
-                      {point.tipo === 'parque' ? '🌳' : point.tipo === 'fonte' ? '💧' : '🏠'}
-                    </span>
-                    <h4 className="font-semibold text-sm">{point.nome}</h4>
-                  </div>
-                  <p className="text-xs text-gray-600 mb-1">{point.descricao}</p>
-                  <p className="text-xs text-gray-500">{point.horario_funcionamento}</p>
-                  <p className="text-xs text-gray-400 mt-1">{point.cidade}</p>
-                </div>
-              ))}
-            </div>
-            
-            {pontos.length > 20 && (
-              <p className="text-sm text-gray-500 mt-4">
-                Mostrando 20 de {pontos.length} pontos. Use os controles para filtrar.
-              </p>
-            )}
-          </div>
-        </div>
+        {/* Área principal do mapa interativo */}
+        <InteractiveMapArea 
+          pontos={pontos}
+          onPointSelect={handlePointSelect}
+          selectedPoint={selectedPoint}
+        />
 
         <MapControls 
           onFindNearest={handleFindNearest}
@@ -178,8 +134,7 @@ const MapView = () => {
           hasSelectedPoint={!!selectedPoint}
         />
 
-        <TemperatureDisplay />
-        <MapLegend />
+        <WeatherNotification />
       </div>
 
       <div className="flex flex-col lg:w-96">

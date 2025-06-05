@@ -27,7 +27,12 @@ export async function fetchPontos(): Promise<PontoResfriamento[]> {
     }
     
     console.log(`${data?.length || 0} pontos encontrados no Supabase`);
-    return data || [];
+    // Convert id to string and ensure type compatibility
+    return (data || []).map(ponto => ({
+      ...ponto,
+      id: ponto.id.toString(),
+      tipo: ponto.tipo as 'parque' | 'fonte' | 'abrigo'
+    }));
   } catch (error) {
     console.error('Erro na conexão com Supabase:', error);
     return [];
@@ -62,11 +67,16 @@ export async function fetchPontosByProximity(
             Math.pow(ponto.longitude - longitude, 2)
           )
         }))
-        .sort((a, b) => a.distance - b.distance)
+        .sort((a: any, b: any) => a.distance - b.distance)
         .slice(0, limit);
     }
     
-    return data || [];
+    // Convert id to string and ensure type compatibility
+    return (data || []).map((ponto: any) => ({
+      ...ponto,
+      id: ponto.id.toString(),
+      tipo: ponto.tipo as 'parque' | 'fonte' | 'abrigo'
+    }));
   } catch (error) {
     console.error('Erro ao buscar pontos próximos:', error);
     return [];

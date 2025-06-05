@@ -63,8 +63,8 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Cores FIAP
-				'fiap-red': '#cc092f',
+				// Nova cor FIAP atualizada
+				'fiap-red': 'rgb(237, 20, 91)',
 				'fiap-black': '#000000',
 				'fiap-white': '#ffffff',
 				'fiap-gray-dark': '#333333',
