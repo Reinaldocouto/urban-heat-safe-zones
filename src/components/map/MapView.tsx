@@ -72,7 +72,6 @@ const MapView = () => {
         <Map
           {...viewState}
           onMove={evt => setViewState(evt.viewState)}
-          mapLib={import('maplibre-gl')}
           style={{ width: '100%', height: '100%' }}
           mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
         >
