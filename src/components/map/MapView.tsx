@@ -85,7 +85,7 @@ const MapView = () => {
             userLon={userLon}
           />
           
-          {selectedPoint && !selectedPoint && (
+          {selectedPoint && (
             <Popup
               longitude={selectedPoint.longitude}
               latitude={selectedPoint.latitude}
