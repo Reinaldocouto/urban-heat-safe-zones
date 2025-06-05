@@ -1,73 +1,147 @@
-# Welcome to your Lovable project
 
-## Project info
+# Clima Safe - Conforto Térmico Urbano
 
-**URL**: https://lovable.dev/projects/87d55890-ea23-445c-9bfc-b427a52715d3
+Sistema de monitoramento climático urbano e mapeamento de pontos de resfriamento desenvolvido para a FIAP.
 
-## How can I edit this code?
+## 🚀 Funcionalidades
 
-There are several ways of editing your application.
+- **Mapa Interativo**: Visualização de pontos de resfriamento (parques, fontes, abrigos)
+- **Geolocalização**: Encontre o ponto mais próximo da sua localização
+- **Dados Climáticos**: Informações meteorológicas em tempo real
+- **Alertas Climáticos**: Notificações sobre condições climáticas extremas
+- **Planejador de Rotas**: Rotas otimizadas considerando o conforto térmico
+- **Feedback dos Usuários**: Sistema de avaliação e comentários
 
-**Use Lovable**
+## 🛠️ Tecnologias
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/87d55890-ea23-445c-9bfc-b427a52715d3) and start prompting.
+- **Frontend**: React + TypeScript + Vite
+- **Mapas**: MapLibre GL JS + React Map GL
+- **Estilização**: Tailwind CSS
+- **APIs**: WeatherAPI, Supabase
+- **Componentes**: Shadcn/UI, Lucide React
 
-Changes made via Lovable will be committed automatically to this repo.
+## 📦 Instalação
 
-**Use your preferred IDE**
+1. Clone o repositório:
+```bash
+git clone <repository-url>
+cd clima-safe
+```
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+2. Instale as dependências:
+```bash
+npm install
+```
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+3. Configure as variáveis de ambiente:
+```bash
+cp .env.example .env
+```
 
-Follow these steps:
+4. Preencha as chaves de API no arquivo `.env`:
+- **Supabase**: Crie um projeto em [supabase.com](https://supabase.com)
+- **WeatherAPI**: Obtenha uma chave em [weatherapi.com](https://weatherapi.com)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+5. Execute o projeto:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## 🗃️ Configuração do Banco de Dados (Supabase)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Crie a tabela `pontos_resfriamento` no Supabase com a seguinte estrutura:
 
-**Use GitHub Codespaces**
+```sql
+CREATE TABLE pontos_resfriamento (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  nome TEXT NOT NULL,
+  descricao TEXT,
+  tipo TEXT CHECK (tipo IN ('parque', 'fonte', 'abrigo')),
+  latitude DOUBLE PRECISION NOT NULL,
+  longitude DOUBLE PRECISION NOT NULL,
+  horario_funcionamento TEXT,
+  cidade TEXT,
+  uf TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🎨 Design System
 
-## What technologies are used for this project?
+O projeto utiliza as cores oficiais da FIAP:
+- **Vermelho FIAP**: `#cc092f`
+- **Preto**: `#000000`
+- **Branco**: `#ffffff`
+- **Cinza Escuro**: `#333333`
+- **Cinza Claro**: `#f5f5f5`
 
-This project is built with:
+## 🌡️ APIs Utilizadas
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### WeatherAPI
+- Dados meteorológicos em tempo real
+- Previsões e alertas climáticos
+- Índices UV e umidade
 
-## How can I deploy this project?
+### Supabase
+- Armazenamento de pontos de resfriamento
+- Sistema de autenticação (futuro)
+- Banco de dados PostgreSQL
 
-Simply open [Lovable](https://lovable.dev/projects/87d55890-ea23-445c-9bfc-b427a52715d3) and click on Share -> Publish.
+## 📱 Responsividade
 
-## Can I connect a custom domain to my Lovable project?
+O projeto é mobile-first e adapta-se a diferentes tamanhos de tela:
+- **Mobile**: Layout empilhado, controles otimizados
+- **Desktop**: Layout em duas colunas (mapa + painel lateral)
 
-Yes, you can!
+## 🧪 Modo de Desenvolvimento
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Para testar sem APIs externas, configure `VITE_USE_MOCK=true` no arquivo `.env`. 
+Isso utilizará dados mockados locais.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## 📄 Estrutura de Arquivos
+
+```
+src/
+├── components/
+│   ├── map/
+│   │   ├── MapView.tsx
+│   │   ├── MapMarkers.tsx
+│   │   ├── MapControls.tsx
+│   │   ├── MapLegend.tsx
+│   │   ├── PointDetailsPanel.tsx
+│   │   └── TemperatureDisplay.tsx
+│   ├── Navigation.tsx
+│   ├── ClimateAlerts.tsx
+│   ├── RoutePlanner.tsx
+│   └── UserFeedback.tsx
+├── hooks/
+│   ├── useGeolocation.ts
+│   ├── useMapData.ts
+│   └── use-toast.ts
+├── services/
+│   ├── supabaseService.ts
+│   └── weatherService.ts
+├── utils/
+│   ├── distance.ts
+│   └── mockPontos.ts
+└── pages/
+    └── Index.tsx
+```
+
+## 🚧 Roadmap
+
+- [ ] Integração com direções de rota
+- [ ] Sistema de autenticação
+- [ ] Notificações push
+- [ ] Modo offline
+- [ ] Analytics e métricas
+- [ ] API pública
+
+## 👥 Contribuição
+
+Este projeto foi desenvolvido como parte do programa FIAP Climate. 
+Para contribuições, siga as diretrizes de código e abra um Pull Request.
+
+## 📝 Licença
+
+Projeto acadêmico FIAP - Todos os direitos reservados.

@@ -1,11 +1,22 @@
-// Update this page (the content is just a fallback if you fail to update the page)
 
-const Index = () => {
+import React, { useState } from 'react';
+import Navigation from '@/components/Navigation';
+import MapView from '@/components/map/MapView';
+import RoutePlanner from '@/components/RoutePlanner';
+import ClimateAlerts from '@/components/ClimateAlerts';
+import UserFeedback from '@/components/UserFeedback';
+
+const Index: React.FC = () => {
+  const [tab, setTab] = useState<'map' | 'routes' | 'alerts' | 'feedback'>('map');
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="h-screen flex flex-col bg-fiap-gray-light">
+      <Navigation currentTab={tab} onChangeTab={setTab} />
+      <div className="flex-1 overflow-hidden">
+        {tab === 'map' && <MapView />}
+        {tab === 'routes' && <RoutePlanner />}
+        {tab === 'alerts' && <ClimateAlerts />}
+        {tab === 'feedback' && <UserFeedback />}
       </div>
     </div>
   );
