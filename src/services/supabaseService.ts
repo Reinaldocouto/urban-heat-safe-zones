@@ -59,20 +59,25 @@ export async function fetchPontosByProximity(
       console.log('RPC function not available, using simple fetch with client-side sorting');
       // Fallback to regular fetch and sort by distance on client
       const allPontos = await fetchPontos();
-      return allPontos
-        .map(ponto => ({
-          ...ponto,
-          distance: Math.sqrt(
-            Math.pow(ponto.latitude - latitude, 2) + 
-            Math.pow(ponto.longitude - longitude, 2)
-          )
-        }))
-        .sort((a, b) => (a as any).distance - (b as any).distance)
-        .slice(0, limit);
+      
+      // Add distance calculation and sort
+      const pontosWithDistance = allPontos.map(ponto => ({
+        ...ponto,
+        distance: Math.sqrt(
+          Math.pow(ponto.latitude - latitude, 2) + 
+          Math.pow(ponto.longitude - longitude, 2)
+        )
+      }));
+      
+      // Sort by distance and return without the distance property
+      return pontosWithDistance
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, limit)
+        .map(({ distance, ...ponto }) => ponto);
     }
     
-    // Convert id to string and ensure type compatibility
-    return (data || []).map((ponto: any) => ({
+    // Convert RPC response to PontoResfriamento format
+    return (data || []).map((ponto: any): PontoResfriamento => ({
       id: ponto.id.toString(),
       nome: ponto.nome,
       descricao: ponto.descricao,
