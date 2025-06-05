@@ -1,13 +1,5 @@
 
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-
-// Only create supabase client if both URL and key are provided
-export const supabase = supabaseUrl && supabaseAnonKey 
-  ? createClient(supabaseUrl, supabaseAnonKey)
-  : null;
+import { supabase } from '@/integrations/supabase/client';
 
 export interface PontoResfriamento {
   id: string;
@@ -22,25 +14,61 @@ export interface PontoResfriamento {
 }
 
 export async function fetchPontos(): Promise<PontoResfriamento[]> {
-  // If supabase is not configured, return empty array (hook will use mock data)
-  if (!supabase) {
-    console.log('Supabase não configurado, usando dados mockados');
-    return [];
-  }
-  
   try {
+    console.log('Buscando pontos do Supabase...');
     const { data, error } = await supabase
       .from('pontos_resfriamento')
-      .select('*');
+      .select('*')
+      .order('nome');
     
     if (error) {
       console.error('Erro ao buscar pontos:', error);
       return [];
     }
     
+    console.log(`${data?.length || 0} pontos encontrados no Supabase`);
     return data || [];
   } catch (error) {
     console.error('Erro na conexão com Supabase:', error);
+    return [];
+  }
+}
+
+export async function fetchPontosByProximity(
+  latitude: number, 
+  longitude: number, 
+  limit: number = 10
+): Promise<PontoResfriamento[]> {
+  try {
+    console.log(`Buscando pontos próximos a ${latitude}, ${longitude}`);
+    
+    // Using Supabase PostGIS extension for proximity calculation
+    const { data, error } = await supabase
+      .rpc('get_nearby_pontos', {
+        user_lat: latitude,
+        user_lng: longitude,
+        proximity_limit: limit
+      });
+    
+    if (error) {
+      console.log('RPC function not available, using simple fetch with client-side sorting');
+      // Fallback to regular fetch and sort by distance on client
+      const allPontos = await fetchPontos();
+      return allPontos
+        .map(ponto => ({
+          ...ponto,
+          distance: Math.sqrt(
+            Math.pow(ponto.latitude - latitude, 2) + 
+            Math.pow(ponto.longitude - longitude, 2)
+          )
+        }))
+        .sort((a, b) => a.distance - b.distance)
+        .slice(0, limit);
+    }
+    
+    return data || [];
+  } catch (error) {
+    console.error('Erro ao buscar pontos próximos:', error);
     return [];
   }
 }
