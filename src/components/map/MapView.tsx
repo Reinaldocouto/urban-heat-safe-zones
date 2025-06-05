@@ -1,14 +1,11 @@
 
 import React, { useState, useCallback } from 'react';
-import Map, { Popup, NavigationControl } from 'react-map-gl';
-import 'maplibre-gl/dist/maplibre-gl.css';
 
 import { useToast } from '@/hooks/use-toast';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { PontoResfriamento } from '@/services/supabaseService';
 import { findNearestPoint } from '@/utils/distance';
 import { useMapData } from '@/hooks/useMapData';
-import MapMarkers from './MapMarkers';
 import MapControls from './MapControls';
 import TemperatureDisplay from './TemperatureDisplay';
 import MapLegend from './MapLegend';
@@ -16,11 +13,6 @@ import PointDetailsPanel from './PointDetailsPanel';
 
 const MapView = () => {
   const [selectedPoint, setSelectedPoint] = useState<PontoResfriamento | null>(null);
-  const [viewState, setViewState] = useState({
-    longitude: -46.6333,
-    latitude: -23.5505,
-    zoom: 12,
-  });
 
   const { latitude: userLat, longitude: userLon, loading: geoLoading, error: geoError } = useGeolocation();
   const { pontos, loading: dataLoading, error: dataError } = useMapData();
@@ -47,11 +39,6 @@ const MapView = () => {
     
     try {
       const { point, distance } = findNearestPoint(userLat, userLon, pontos);
-      setViewState({ 
-        longitude: point.longitude, 
-        latitude: point.latitude, 
-        zoom: 15 
-      });
       setSelectedPoint(point);
       toast({ 
         title: 'Ponto mais próximo encontrado!', 
@@ -66,43 +53,38 @@ const MapView = () => {
     }
   }, [userLat, userLon, pontos, toast, geoError]);
 
+  const handlePointSelect = (point: PontoResfriamento) => {
+    setSelectedPoint(point);
+  };
+
   return (
     <div className="h-full flex flex-col lg:flex-row">
       <div className="flex-1 relative">
-        <Map
-          {...viewState}
-          onMove={evt => setViewState(evt.viewState)}
-          style={{ width: '100%', height: '100%' }}
-          mapStyle="https://basemaps.cartocdn.com/gl/positron-gl-style/style.json"
-        >
-          <NavigationControl position="top-right" />
-          
-          <MapMarkers 
-            pontos={pontos}
-            onPointSelect={setSelectedPoint}
-            userLat={userLat}
-            userLon={userLon}
-          />
-          
-          {selectedPoint && (
-            <Popup
-              longitude={selectedPoint.longitude}
-              latitude={selectedPoint.latitude}
-              anchor="top"
-              onClose={() => setSelectedPoint(null)}
-              closeButton
-              closeOnClick={false}
-            >
-              <div className="p-2 max-w-xs">
-                <h3 className="font-semibold text-sm">{selectedPoint.nome}</h3>
-                <p className="text-xs text-gray-600 mt-1">{selectedPoint.descricao}</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Horário: {selectedPoint.horario_funcionamento}
-                </p>
-              </div>
-            </Popup>
-          )}
-        </Map>
+        {/* Map Placeholder */}
+        <div className="w-full h-full bg-gray-100 relative flex items-center justify-center">
+          <div className="text-center p-8">
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Mapa de Pontos de Resfriamento</h3>
+            <p className="text-gray-600 mb-4">São Paulo - SP</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-4xl">
+              {pontos.map((point) => (
+                <div 
+                  key={point.id} 
+                  className="bg-white p-4 rounded-lg shadow-md cursor-pointer hover:shadow-lg transition-shadow"
+                  onClick={() => handlePointSelect(point)}
+                >
+                  <div className="flex items-center mb-2">
+                    <span className="text-2xl mr-2">
+                      {point.tipo === 'parque' ? '🌳' : point.tipo === 'fonte' ? '💧' : '🏠'}
+                    </span>
+                    <h4 className="font-semibold text-sm">{point.nome}</h4>
+                  </div>
+                  <p className="text-xs text-gray-600 mb-1">{point.descricao}</p>
+                  <p className="text-xs text-gray-500">{point.horario_funcionamento}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
         <MapControls 
           onFindNearest={handleFindNearest}
