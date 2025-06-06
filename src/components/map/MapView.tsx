@@ -163,7 +163,7 @@ const MapView = () => {
             <div className="absolute top-20 right-4 z-20">
               <Button
                 onClick={() => setIsWeatherPanelOpen(!isWeatherPanelOpen)}
-                className="bg-fiap-red hover:bg-fiap-red/90 text-white shadow-lg border-2 border-white/20 backdrop-blur-sm"
+                className="bg-fiap-pink hover:bg-fiap-pink/90 text-white shadow-lg border-2 border-white/20 backdrop-blur-sm"
                 size="sm"
               >
                 <Activity className="h-4 w-4 mr-2" />
@@ -205,9 +205,9 @@ const MapView = () => {
 
       {(dataLoading || geoLoading || isCalculatingRoute) && (
         <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="text-center bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-fiap-red/20">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-fiap-red mx-auto"></div>
-            <p className="mt-3 text-sm text-gray-700 font-medium">
+          <div className="text-center bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-fiap-pink/20">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-fiap-pink mx-auto"></div>
+            <p className="mt-3 text-sm text-fiap-gray-dark font-medium">
               {isCalculatingRoute ? 'Calculando rota térmica...' : 
                geoLoading ? 'Obtendo localização...' : 'Carregando pontos...'}
             </p>

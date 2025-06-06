@@ -64,7 +64,7 @@ const WeatherSafetyPanel: React.FC<WeatherSafetyPanelProps> = ({ isOpen, onClose
   return (
     <div className="fixed top-16 right-0 h-[calc(100vh-4rem)] w-96 bg-white shadow-2xl z-50 overflow-y-auto border-l border-gray-200">
       {/* Header */}
-      <div className="bg-fiap-red text-white p-4 flex items-center justify-between">
+      <div className="bg-fiap-dark text-white p-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <MapPin className="h-5 w-5" />
           <h2 className="text-lg font-semibold">Painel Clima Seguro</h2>
@@ -95,8 +95,8 @@ const WeatherSafetyPanel: React.FC<WeatherSafetyPanelProps> = ({ isOpen, onClose
         {geoLoading && (
           <Card className="p-4">
             <div className="flex items-center space-x-2">
-              <RefreshCw className="h-4 w-4 animate-spin text-fiap-red" />
-              <span className="text-sm text-gray-600">Obtendo localização...</span>
+              <RefreshCw className="h-4 w-4 animate-spin text-fiap-pink" />
+              <span className="text-sm text-fiap-gray-dark">Obtendo localização...</span>
             </div>
           </Card>
         )}
@@ -113,7 +113,7 @@ const WeatherSafetyPanel: React.FC<WeatherSafetyPanelProps> = ({ isOpen, onClose
           <>
             {/* Last Update */}
             {lastUpdate && (
-              <div className="flex items-center justify-center space-x-1 text-xs text-gray-500">
+              <div className="flex items-center justify-center space-x-1 text-xs text-fiap-gray">
                 <Clock className="h-3 w-3" />
                 <span>
                   Última atualização: {lastUpdate.toLocaleTimeString('pt-BR')}
