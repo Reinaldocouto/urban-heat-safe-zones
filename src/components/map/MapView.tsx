@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { Activity } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -157,9 +158,9 @@ const MapView = () => {
             </div>
           )}
 
-          {/* Weather Panel Toggle Button - top right */}
+          {/* Weather Panel Toggle Button - top right, positioned below navigation */}
           {userLat && userLon && !geoError && (
-            <div className="absolute top-4 right-4 z-20">
+            <div className="absolute top-20 right-4 z-20">
               <Button
                 onClick={() => setIsWeatherPanelOpen(!isWeatherPanelOpen)}
                 className="bg-fiap-red hover:bg-fiap-red/90 text-white shadow-lg border-2 border-white/20 backdrop-blur-sm"
