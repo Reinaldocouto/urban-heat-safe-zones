@@ -171,8 +171,7 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         user-select: none;
-        position: absolute;
-        transform: translate(-50%, -50%);
+        
       `;
       el.innerHTML = getPointIcon(ponto.tipo);
 
