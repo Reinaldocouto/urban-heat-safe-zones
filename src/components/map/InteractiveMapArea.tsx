@@ -123,37 +123,57 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    // Add new markers - process each point individually
+    // Add new markers - process each point individually with FIXED coordinates
     pontos.forEach((ponto, index) => {
-      // Validate coordinates
-      const lat = parseFloat(ponto.latitude.toString());
-      const lng = parseFloat(ponto.longitude.toString());
+      // CRITICAL: Ensure coordinates are properly converted and validated
+      let lat: number;
+      let lng: number;
       
-      if (isNaN(lat) || isNaN(lng)) {
-        console.warn(`Coordenadas inválidas para ${ponto.nome}: [${lng}, ${lat}]`);
+      // Handle different data types for coordinates
+      if (typeof ponto.latitude === 'string') {
+        lat = parseFloat(ponto.latitude);
+      } else {
+        lat = Number(ponto.latitude);
+      }
+      
+      if (typeof ponto.longitude === 'string') {
+        lng = parseFloat(ponto.longitude);
+      } else {
+        lng = Number(ponto.longitude);
+      }
+      
+      // Validate coordinates are valid numbers and within São Paulo bounds
+      if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
+        console.error(`Coordenadas inválidas para ${ponto.nome}: lat=${lat}, lng=${lng}`);
         return;
       }
-
-      console.log(`Criando marcador ${index + 1}/${pontos.length} para ${ponto.nome} em [${lng}, ${lat}]`);
       
-      // Create marker element with stable positioning
+      // Double check São Paulo bounds (rough validation)
+      if (lat < -24 || lat > -23 || lng < -47 || lng > -46) {
+        console.warn(`Coordenadas fora dos limites de São Paulo para ${ponto.nome}: [${lng}, ${lat}]`);
+      }
+
+      console.log(`Criando marcador ${index + 1}/${pontos.length} para ${ponto.nome} em coordenadas FIXAS: [${lng}, ${lat}]`);
+      
+      // Create marker element
       const el = document.createElement('div');
       el.className = 'cooling-point-marker';
-      el.style.width = '32px';
-      el.style.height = '32px';
-      el.style.backgroundColor = getPointColor(ponto.tipo);
-      el.style.border = '2px solid white';
-      el.style.borderRadius = '50%';
-      el.style.display = 'flex';
-      el.style.alignItems = 'center';
-      el.style.justifyContent = 'center';
-      el.style.fontSize = '14px';
-      el.style.cursor = 'pointer';
-      el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-      el.style.userSelect = 'none';
-      el.style.pointerEvents = 'auto';
-      el.style.position = 'relative';
-      el.style.zIndex = '100';
+      el.style.cssText = `
+        width: 32px;
+        height: 32px;
+        background-color: ${getPointColor(ponto.tipo)};
+        border: 2px solid white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        user-select: none;
+        position: absolute;
+        transform: translate(-50%, -50%);
+      `;
       el.innerHTML = getPointIcon(ponto.tipo);
 
       // Create popup for hover information
@@ -178,56 +198,48 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
         </div>
       `);
 
-      // Add event listeners with proper cleanup
-      const handleMouseEnter = () => {
-        el.style.transform = 'scale(1.2)';
-        el.style.zIndex = '1000';
+      // Add event listeners
+      el.addEventListener('mouseenter', () => {
+        el.style.transform = 'translate(-50%, -50%) scale(1.2)';
         popup.setLngLat([lng, lat]).addTo(map.current!);
-      };
+      });
 
-      const handleMouseLeave = () => {
-        el.style.transform = 'scale(1)';
-        el.style.zIndex = '100';
+      el.addEventListener('mouseleave', () => {
+        el.style.transform = 'translate(-50%, -50%) scale(1)';
         popup.remove();
-      };
+      });
 
-      const handleClick = (e: Event) => {
+      el.addEventListener('click', (e) => {
         e.stopPropagation();
         console.log('Marker clicked:', ponto.nome);
         onPointSelect(ponto);
         popup.remove();
-      };
+      });
 
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
-      el.addEventListener('click', handleClick);
-
-      // Create MapLibre marker with precise positioning
+      // Create MapLibre marker with ABSOLUTELY FIXED positioning
       try {
         const marker = new maplibregl.Marker({ 
           element: el,
-          anchor: 'center',
-          // Ensure marker stays fixed to coordinates
-          draggable: false
+          anchor: 'center'
         })
-          .setLngLat([lng, lat])
+          .setLngLat([lng, lat]) // FIXED coordinates - never change
           .addTo(map.current!);
 
         markersRef.current.push(marker);
-        console.log(`Marcador ${index + 1} adicionado com sucesso para ${ponto.nome}`);
+        console.log(`Marcador ${index + 1} FIXADO com sucesso para ${ponto.nome} nas coordenadas [${lng}, ${lat}]`);
       } catch (error) {
         console.error(`Erro ao criar marcador para ${ponto.nome}:`, error);
       }
     });
 
-    console.log(`Total de marcadores criados: ${markersRef.current.length}`);
+    console.log(`Total de marcadores FIXOS criados: ${markersRef.current.length}`);
 
     // Fit map to show all points if there are any
     if (markersRef.current.length > 0 && pontos.length > 0) {
       const bounds = new maplibregl.LngLatBounds();
       pontos.forEach(ponto => {
-        const lat = parseFloat(ponto.latitude.toString());
-        const lng = parseFloat(ponto.longitude.toString());
+        const lat = typeof ponto.latitude === 'string' ? parseFloat(ponto.latitude) : Number(ponto.latitude);
+        const lng = typeof ponto.longitude === 'string' ? parseFloat(ponto.longitude) : Number(ponto.longitude);
         if (!isNaN(lat) && !isNaN(lng)) {
           bounds.extend([lng, lat]);
         }
@@ -245,8 +257,8 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
     if (!map.current || !selectedPoint || !isMapLoaded) return;
 
     // Find the coordinates for the selected point
-    const lat = parseFloat(selectedPoint.latitude.toString());
-    const lng = parseFloat(selectedPoint.longitude.toString());
+    const lat = typeof selectedPoint.latitude === 'string' ? parseFloat(selectedPoint.latitude) : Number(selectedPoint.latitude);
+    const lng = typeof selectedPoint.longitude === 'string' ? parseFloat(selectedPoint.longitude) : Number(selectedPoint.longitude);
 
     if (isNaN(lat) || isNaN(lng)) return;
 
@@ -263,11 +275,11 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
       const element = marker.getElement();
       
       if (ponto && ponto.id === selectedPoint.id) {
-        element.style.transform = 'scale(1.3)';
+        element.style.transform = 'translate(-50%, -50%) scale(1.3)';
         element.style.border = '3px solid #ed145b';
         element.style.zIndex = '1001';
       } else {
-        element.style.transform = 'scale(1)';
+        element.style.transform = 'translate(-50%, -50%) scale(1)';
         element.style.border = '2px solid white';
         element.style.zIndex = '100';
       }
