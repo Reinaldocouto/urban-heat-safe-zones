@@ -123,63 +123,26 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
 
     // Add new markers
     pontos.forEach((ponto) => {
+      // Create marker element
       const el = document.createElement('div');
-      el.className = 'marker-icon';
-      
-      // Fixed CSS styles to prevent the "jumping" behavior
-      el.style.cssText = `
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background-color: ${getPointColor(ponto.tipo)};
-        border: 2px solid white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        cursor: pointer;
-        transition: transform 0.2s ease-in-out;
-        position: relative;
-        z-index: 1;
+      el.className = 'map-marker';
+      el.innerHTML = `
+        <div class="marker-content" style="
+          width: 32px;
+          height: 32px;
+          background-color: ${getPointColor(ponto.tipo)};
+          border: 2px solid white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          transition: transform 0.2s ease;
+          user-select: none;
+        ">${getPointIcon(ponto.tipo)}</div>
       `;
-      
-      el.textContent = getPointIcon(ponto.tipo);
-
-      // Add hover effect with proper event handling
-      const handleMouseEnter = () => {
-        el.style.transform = 'scale(1.2)';
-        el.style.zIndex = '1000';
-        
-        // Show popup on hover
-        popup.setLngLat([ponto.longitude, ponto.latitude]).addTo(map.current!);
-      };
-
-      const handleMouseLeave = () => {
-        el.style.transform = 'scale(1)';
-        el.style.zIndex = '1';
-        
-        // Hide popup on mouse leave
-        popup.remove();
-      };
-
-      const handleClick = (e: Event) => {
-        e.stopPropagation();
-        console.log('Marker clicked:', ponto.nome);
-        onPointSelect(ponto);
-      };
-
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
-      el.addEventListener('click', handleClick);
-
-      // Create marker with proper anchor
-      const marker = new maplibregl.Marker({ 
-        element: el,
-        anchor: 'center'
-      })
-        .setLngLat([ponto.longitude, ponto.latitude])
-        .addTo(map.current!);
 
       // Create popup for hover information
       const popup = new maplibregl.Popup({ 
@@ -203,10 +166,40 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
         </div>
       `);
 
+      const markerContent = el.querySelector('.marker-content') as HTMLElement;
+
+      // Add event listeners to the marker content
+      markerContent.addEventListener('mouseenter', () => {
+        markerContent.style.transform = 'scale(1.2)';
+        markerContent.style.zIndex = '1000';
+        popup.setLngLat([ponto.longitude, ponto.latitude]).addTo(map.current!);
+      });
+
+      markerContent.addEventListener('mouseleave', () => {
+        markerContent.style.transform = 'scale(1)';
+        markerContent.style.zIndex = '1';
+        popup.remove();
+      });
+
+      markerContent.addEventListener('click', (e) => {
+        e.stopPropagation();
+        console.log('Marker clicked:', ponto.nome);
+        onPointSelect(ponto);
+        popup.remove();
+      });
+
+      // Create MapLibre marker
+      const marker = new maplibregl.Marker({ 
+        element: el,
+        anchor: 'center'
+      })
+        .setLngLat([ponto.longitude, ponto.latitude])
+        .addTo(map.current!);
+
       markersRef.current.push(marker);
     });
 
-    // Fit map to show all points
+    // Fit map to show all points if there are any
     if (pontos.length > 0) {
       const bounds = new maplibregl.LngLatBounds();
       pontos.forEach(ponto => {
@@ -235,15 +228,16 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
     markersRef.current.forEach((marker, index) => {
       const ponto = pontos[index];
       const element = marker.getElement();
+      const markerContent = element.querySelector('.marker-content') as HTMLElement;
       
       if (ponto && ponto.id === selectedPoint.id) {
-        element.style.transform = 'scale(1.3)';
-        element.style.border = '3px solid #ed145b';
-        element.style.zIndex = '1001';
+        markerContent.style.transform = 'scale(1.3)';
+        markerContent.style.border = '3px solid #ed145b';
+        markerContent.style.zIndex = '1001';
       } else {
-        element.style.transform = 'scale(1)';
-        element.style.border = '2px solid white';
-        element.style.zIndex = '1';
+        markerContent.style.transform = 'scale(1)';
+        markerContent.style.border = '2px solid white';
+        markerContent.style.zIndex = '1';
       }
     });
   }, [selectedPoint, pontos, isMapLoaded]);
