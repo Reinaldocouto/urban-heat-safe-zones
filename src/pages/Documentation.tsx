@@ -307,69 +307,397 @@ const Documentation: React.FC = () => {
             <SectionHeader id="telas" title="4. Protótipo e Funcionalidades" icon={MapPin} />
             {expandedSections.has('telas') && (
               <CardContent className="p-6">
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-fiap-red">Telas Principais</h3>
-                    
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-semibold mb-2">🗺️ Dashboard Principal</h4>
-                      <p className="text-sm text-gray-600 mb-2">Mapa interativo com pontos de resfriamento</p>
-                      <div className="text-xs space-y-1">
-                        <div>• Visualização de marcadores</div>
-                        <div>• Geolocalização automática</div>
-                        <div>• Widget climático em tempo real</div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                  <div>
+                    <h3 className="text-lg font-semibold text-fiap-red mb-4">Dashboard Principal (Mapa)</h3>
+                    <div className="border rounded-lg p-4 mb-2 bg-white">
+                      <div className="bg-gray-100 rounded-lg p-2 aspect-video flex items-center justify-center overflow-hidden">
+                        <div className="w-full h-full bg-gradient-to-br from-blue-50 to-blue-100 rounded-md relative">
+                          {/* Simulação da interface do mapa */}
+                          <div className="absolute inset-0 flex flex-col">
+                            {/* Navbar simulado */}
+                            <div className="h-10 bg-fiap-red flex items-center px-4 text-white text-xs">
+                              <div className="mr-auto flex items-center space-x-1">
+                                <div className="w-4 h-4 rounded-full bg-white/60"></div>
+                                <span>Clima Safe</span>
+                              </div>
+                              <div className="flex space-x-2">
+                                <div className="w-8 h-6 bg-white/20 rounded"></div>
+                                <div className="w-8 h-6 bg-white/20 rounded"></div>
+                                <div className="w-8 h-6 bg-white/20 rounded"></div>
+                              </div>
+                            </div>
+                            
+                            {/* Conteúdo do mapa */}
+                            <div className="flex-1 relative">
+                              {/* Mapa simulado */}
+                              <div className="absolute inset-0 bg-blue-50"></div>
+                              
+                              {/* Pontos no mapa */}
+                              <div className="absolute w-4 h-4 bg-fiap-red rounded-full top-1/4 left-1/3 transform -translate-x-1/2 -translate-y-1/2 shadow-md"></div>
+                              <div className="absolute w-4 h-4 bg-fiap-red rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 shadow-md"></div>
+                              <div className="absolute w-4 h-4 bg-fiap-red rounded-full bottom-1/4 right-1/4 transform -translate-x-1/2 -translate-y-1/2 shadow-md"></div>
+                              
+                              {/* Controles de mapa */}
+                              <div className="absolute top-4 left-4 bg-white p-2 rounded-lg shadow-md">
+                                <div className="w-20 h-6 bg-fiap-red rounded-md"></div>
+                              </div>
+                              
+                              {/* Painel lateral */}
+                              <div className="absolute top-0 right-0 h-full w-1/3 bg-white shadow-lg">
+                                <div className="h-10 bg-fiap-red flex items-center justify-between px-4 text-white text-xs">
+                                  <span>Clima Seguro</span>
+                                  <div className="w-4 h-4 bg-white/20 rounded-full"></div>
+                                </div>
+                                <div className="p-2">
+                                  <div className="h-16 bg-gray-100 rounded-md mb-2"></div>
+                                  <div className="h-20 bg-gray-100 rounded-md mb-2"></div>
+                                  <div className="h-24 bg-gray-100 rounded-md"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                      <p className="text-sm text-gray-600 mt-2 text-center">
+                        Dashboard Principal com Mapa Interativo e Painel Clima Seguro
+                      </p>
                     </div>
                     
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-semibold mb-2">🚗 Planejador de Rotas</h4>
-                      <p className="text-sm text-gray-600 mb-2">Otimização de trajetos térmicos</p>
-                      <div className="text-xs space-y-1">
-                        <div>• Campos origem/destino</div>
-                        <div>• Integração Google Maps</div>
-                        <div>• Botão localização atual</div>
+                    <div className="text-sm text-gray-700 space-y-1 mt-3">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Visualização geoespacial de pontos de resfriamento</span>
                       </div>
-                    </div>
-                    
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-semibold mb-2">⚠️ Alertas Climáticos</h4>
-                      <p className="text-sm text-gray-600 mb-2">Sistema de notificações preventivas</p>
-                      <div className="text-xs space-y-1">
-                        <div>• Alertas por severidade</div>
-                        <div>• Recomendações de segurança</div>
-                        <div>• Histórico de alertas</div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Painel Clima Seguro com dados meteorológicos em tempo real</span>
                       </div>
-                    </div>
-                    
-                    <div className="border rounded-lg p-4">
-                      <h4 className="font-semibold mb-2">💬 Sistema de Feedback</h4>
-                      <p className="text-sm text-gray-600 mb-2">Avaliação comunitária</p>
-                      <div className="text-xs space-y-1">
-                        <div>• Visualização pública</div>
-                        <div>• Sistema de estrelas</div>
-                        <div>• Envio requer login</div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Localização automática do usuário</span>
                       </div>
                     </div>
                   </div>
                   
                   <div>
-                    <h3 className="text-lg font-semibold text-fiap-red mb-4">Mockup das Telas</h3>
-                    <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center mb-4">
-                      <div className="text-center text-gray-500">
-                        <MapPin className="h-12 w-12 mx-auto mb-2" />
-                        <p>Dashboard Principal</p>
-                        <p className="text-sm">Mapa Interativo</p>
+                    <h3 className="text-lg font-semibold text-fiap-red mb-4">Painel Clima Seguro</h3>
+                    <div className="border rounded-lg p-4 mb-2 bg-white">
+                      <div className="bg-gray-100 rounded-lg p-2 aspect-video flex items-center justify-center overflow-hidden">
+                        <div className="w-full h-full bg-white rounded-md shadow-inner relative">
+                          {/* Simulação do painel de clima */}
+                          <div className="absolute inset-0 flex flex-col">
+                            <div className="h-10 bg-fiap-red text-white flex items-center justify-between px-4">
+                              <div className="flex items-center space-x-2">
+                                <div className="w-4 h-4 bg-white/30 rounded-full"></div>
+                                <span className="text-xs font-medium">Painel Clima Seguro</span>
+                              </div>
+                              <div className="w-4 h-4 bg-white/30 rounded-full"></div>
+                            </div>
+                            
+                            <div className="p-3 flex-1">
+                              {/* Widget clima atual */}
+                              <div className="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-3 flex justify-between items-center">
+                                <div className="flex flex-col">
+                                  <span className="text-xs text-gray-600">São Paulo</span>
+                                  <span className="text-lg font-medium">32°C</span>
+                                  <span className="text-xs text-gray-600">Sensação: 35°C</span>
+                                </div>
+                                <div className="w-12 h-12 bg-yellow-300 rounded-full"></div>
+                              </div>
+                              
+                              {/* Gráfico clima */}
+                              <div className="h-20 bg-gray-100 rounded-lg border border-gray-200 mb-3 relative p-2">
+                                <div className="absolute bottom-2 left-0 right-0 h-12 flex items-end px-2">
+                                  <div className="flex-1 h-8 bg-blue-300 rounded-sm mx-px"></div>
+                                  <div className="flex-1 h-10 bg-blue-300 rounded-sm mx-px"></div>
+                                  <div className="flex-1 h-7 bg-blue-300 rounded-sm mx-px"></div>
+                                  <div className="flex-1 h-5 bg-blue-300 rounded-sm mx-px"></div>
+                                  <div className="flex-1 h-6 bg-blue-300 rounded-sm mx-px"></div>
+                                  <div className="flex-1 h-9 bg-blue-300 rounded-sm mx-px"></div>
+                                </div>
+                              </div>
+                              
+                              {/* Recomendações */}
+                              <div className="bg-orange-50 border border-orange-100 rounded-lg p-2 mb-3">
+                                <div className="text-xs font-medium text-orange-800 mb-1">Recomendações</div>
+                                <div className="h-3 bg-orange-100 rounded w-full mb-1"></div>
+                                <div className="h-3 bg-orange-100 rounded w-5/6"></div>
+                              </div>
+                              
+                              {/* Pontos próximos */}
+                              <div className="bg-green-50 border border-green-100 rounded-lg p-2">
+                                <div className="text-xs font-medium text-green-800 mb-1">Pontos de resfriamento próximos</div>
+                                <div className="flex items-center justify-between mb-1">
+                                  <div className="h-3 bg-green-100 rounded w-1/3"></div>
+                                  <div className="h-3 bg-green-100 rounded w-1/6"></div>
+                                </div>
+                                <div className="flex items-center justify-between mb-1">
+                                  <div className="h-3 bg-green-100 rounded w-1/2"></div>
+                                  <div className="h-3 bg-green-100 rounded w-1/6"></div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
+                      <p className="text-sm text-gray-600 mt-2 text-center">
+                        Painel Clima Seguro com Informações Meteorológicas em Tempo Real
+                      </p>
                     </div>
                     
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-gray-200 h-20 rounded flex items-center justify-center">
-                        <span className="text-xs text-gray-500">Rotas</span>
+                    <div className="text-sm text-gray-700 space-y-1 mt-3">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Temperatura atual e sensação térmica</span>
                       </div>
-                      <div className="bg-gray-200 h-20 rounded flex items-center justify-center">
-                        <span className="text-xs text-gray-500">Alertas</span>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Previsão do tempo em gráfico interativo</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Listagem de pontos de resfriamento por proximidade</span>
                       </div>
                     </div>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <h3 className="text-lg font-semibold text-fiap-red mb-4">Planejador de Rotas Térmicas</h3>
+                    <div className="border rounded-lg p-4 mb-2 bg-white">
+                      <div className="bg-gray-100 rounded-lg p-2 aspect-video flex items-center justify-center overflow-hidden">
+                        <div className="w-full h-full bg-white rounded-md shadow-inner p-3 flex flex-col">
+                          {/* Simulação do planejador de rotas */}
+                          <div className="flex items-center space-x-2 mb-3">
+                            <div className="w-6 h-6 bg-fiap-red rounded-full flex-shrink-0"></div>
+                            <h4 className="text-sm font-medium">Planeje sua Rota Térmica</h4>
+                          </div>
+                          
+                          <div className="flex flex-col space-y-2 mb-3">
+                            <div className="flex flex-col">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <div className="w-3 h-3 bg-fiap-red rounded-full"></div>
+                                <span className="text-xs">Origem</span>
+                              </div>
+                              <div className="h-8 bg-gray-100 border border-gray-200 rounded-md"></div>
+                            </div>
+                            <div className="flex flex-col">
+                              <div className="flex items-center space-x-2 mb-1">
+                                <div className="w-3 h-3 bg-fiap-red rounded-full"></div>
+                                <span className="text-xs">Destino</span>
+                              </div>
+                              <div className="h-8 bg-gray-100 border border-gray-200 rounded-md"></div>
+                            </div>
+                          </div>
+                          
+                          <div className="h-8 bg-fiap-red rounded-md flex items-center justify-center mb-3">
+                            <span className="text-white text-xs">Calcular Rota Térmica</span>
+                          </div>
+                          
+                          <div className="flex-1 bg-green-50 rounded-md p-2">
+                            <div className="text-xs font-medium mb-2">Funcionalidades:</div>
+                            <div className="flex items-center space-x-2 mb-1">
+                              <div className="w-2 h-2 bg-fiap-red rounded-full"></div>
+                              <div className="h-2 bg-gray-200 rounded w-full"></div>
+                            </div>
+                            <div className="flex items-center space-x-2 mb-1">
+                              <div className="w-2 h-2 bg-fiap-red rounded-full"></div>
+                              <div className="h-2 bg-gray-200 rounded w-full"></div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <div className="w-2 h-2 bg-fiap-red rounded-full"></div>
+                              <div className="h-2 bg-gray-200 rounded w-full"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2 text-center">
+                        Planejador de Rotas Térmicas com Otimização de Trajetos
+                      </p>
+                    </div>
+                    
+                    <div className="text-sm text-gray-700 space-y-1 mt-3">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Origem e destino personalizáveis</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Integração com localização atual do usuário</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Rota otimizada para áreas mais frescas</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h3 className="text-lg font-semibold text-fiap-red mb-4">Alertas Climáticos e Feedback</h3>
+                    <div className="border rounded-lg p-4 mb-2 bg-white">
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="bg-gray-100 rounded-lg p-2 aspect-square flex items-center justify-center overflow-hidden">
+                          <div className="w-full h-full bg-white rounded-md shadow-inner p-2 flex flex-col">
+                            {/* Alerta climático */}
+                            <div className="flex items-center space-x-1 mb-2">
+                              <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                              <span className="text-xs font-medium">Alertas Climáticos</span>
+                            </div>
+                            
+                            <div className="bg-red-50 border border-red-200 rounded-md p-2 mb-2 flex flex-col">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-xs font-medium text-red-800">ALERTA</span>
+                                <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                              </div>
+                              <div className="h-2 bg-red-100 rounded w-full mb-1"></div>
+                              <div className="h-2 bg-red-100 rounded w-5/6"></div>
+                            </div>
+                            
+                            <div className="bg-orange-50 border border-orange-200 rounded-md p-2 flex flex-col">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-xs font-medium text-orange-800">AVISO</span>
+                                <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+                              </div>
+                              <div className="h-2 bg-orange-100 rounded w-full mb-1"></div>
+                              <div className="h-2 bg-orange-100 rounded w-5/6"></div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-gray-100 rounded-lg p-2 aspect-square flex items-center justify-center overflow-hidden">
+                          <div className="w-full h-full bg-white rounded-md shadow-inner p-2 flex flex-col">
+                            {/* Feedback de usuários */}
+                            <div className="flex items-center space-x-1 mb-2">
+                              <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+                              <span className="text-xs font-medium">Feedback de Usuários</span>
+                            </div>
+                            
+                            <div className="bg-blue-50 border border-blue-200 rounded-md p-2 mb-2">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-xs">Parque Ibirapuera</span>
+                                <div className="flex space-x-px">
+                                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                  <div className="w-2 h-2 bg-gray-200 rounded-full"></div>
+                                </div>
+                              </div>
+                              <div className="h-2 bg-blue-100 rounded w-full mb-1"></div>
+                              <div className="h-2 bg-blue-100 rounded w-4/6"></div>
+                            </div>
+                            
+                            <div className="bg-blue-50 border border-blue-200 rounded-md p-2">
+                              <div className="flex justify-between items-center mb-1">
+                                <span className="text-xs">Fonte Praça da Sé</span>
+                                <div className="flex space-x-px">
+                                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                  <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                  <div className="w-2 h-2 bg-gray-200 rounded-full"></div>
+                                  <div className="w-2 h-2 bg-gray-200 rounded-full"></div>
+                                </div>
+                              </div>
+                              <div className="h-2 bg-blue-100 rounded w-full mb-1"></div>
+                              <div className="h-2 bg-blue-100 rounded w-3/6"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-600 mt-2 text-center">
+                        Sistema de Alertas e Feedback Comunitário
+                      </p>
+                    </div>
+                    
+                    <div className="text-sm text-gray-700 space-y-1 mt-3">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Alertas categorizados por severidade</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Sistema de avaliação por estrelas</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <div className="w-2 h-2 rounded-full bg-fiap-red"></div>
+                        <span>Comentários e relatos da comunidade</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-gray-200 mt-8 pt-6">
+                  <h3 className="text-lg font-semibold text-fiap-red mb-4">Verificações de Qualidade</h3>
+                  <div className="border rounded-lg p-4 bg-white">
+                    <div className="bg-gray-100 rounded-lg p-2 aspect-video flex items-center justify-center overflow-hidden">
+                      <div className="w-full h-full bg-neutral-800 rounded-md shadow-inner p-3 flex flex-col text-green-400 font-mono text-xs">
+                        <div className="flex space-x-2 mb-4">
+                          <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        </div>
+                        
+                        <div className="flex items-center mb-1">
+                          <span className="text-white mr-2">❯</span>
+                          <span>🧪 Executando Testes Automatizados do Clima Safe</span>
+                        </div>
+                        <div className="flex items-center mb-1">
+                          <span className="text-white mr-2">❯</span>
+                          <span>================================================</span>
+                        </div>
+                        <div className="mb-2"></div>
+                        
+                        <div className="flex items-center mb-1">
+                          <span className="text-yellow-400 mr-2">1.</span>
+                          <span className="text-yellow-400">Testes Unitários</span>
+                        </div>
+                        <div className="flex items-center mb-1">
+                          <span className="text-green-500 mr-2">✅</span>
+                          <span>Testes de serviços e componentes</span>
+                        </div>
+                        <div className="mb-1"></div>
+                        
+                        <div className="flex items-center mb-1">
+                          <span className="text-yellow-400 mr-2">2.</span>
+                          <span className="text-yellow-400">Testes de Integração</span>
+                        </div>
+                        <div className="flex items-center mb-1">
+                          <span className="text-green-500 mr-2">✅</span>
+                          <span>Testes de fluxo integrado</span>
+                        </div>
+                        <div className="mb-1"></div>
+                        
+                        <div className="flex items-center mb-1">
+                          <span className="text-yellow-400 mr-2">3.</span>
+                          <span className="text-yellow-400">Testes de Performance</span>
+                        </div>
+                        <div className="flex items-center mb-1">
+                          <span className="text-green-500 mr-2">✅</span>
+                          <span>Testes de performance</span>
+                        </div>
+                        <div className="mb-1"></div>
+
+                        <div className="flex items-center mb-1">
+                          <span className="text-white mr-2">❯</span>
+                          <span>🏁 Execução completa!</span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="text-white mr-2">❯</span>
+                          <span>📊 Verifique o relatório de cobertura em: coverage/...</span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2 text-center">
+                      Interface de Execução de Testes Automatizados
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex justify-center mt-8">
+                  <div className="bg-fiap-red text-white px-4 py-2 rounded-md text-sm">
+                    Acesse o protótipo funcional completo: <span className="font-mono">https://urban-heat-safe-zones.vercel.app/</span>
                   </div>
                 </div>
               </CardContent>
@@ -576,6 +904,111 @@ const Documentation: React.FC = () => {
                           </div>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            )}
+          </Card>
+
+          {/* Apêndice Técnico */}
+          <Card>
+            <SectionHeader id="apendice" title="8. Apêndice Técnico" icon={Globe} />
+            {expandedSections.has('apendice') && (
+              <CardContent className="p-6">
+                <div className="bg-gray-50 p-4 rounded-lg mb-6">
+                  <h3 className="text-lg font-semibold mb-3 text-fiap-red text-center">Detalhamento Técnico Completo</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Esta seção contém o detalhamento técnico completo da solução, incluindo arquitetura, 
+                    componentes, serviços e estrutura de código. O documento completo pode ser consultado
+                    e baixado para uma análise mais aprofundada.
+                  </p>
+                  
+                  <div className="flex justify-center">
+                    <Button 
+                      variant="outline" 
+                      className="border-fiap-red text-fiap-red hover:bg-fiap-red hover:text-white"
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      Baixar Documentação Técnica Completa (PDF)
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-gray-700 mb-2">Padrões de Código</h4>
+                    <div className="bg-black rounded-md p-3 text-xs font-mono">
+                      <div className="text-green-400">// Exemplo de componente React com TypeScript</div>
+                      <div className="text-blue-400">import</div>
+                      <div className="text-white"> React from </div>
+                      <div className="text-amber-400">'react'</div>
+                      <div className="text-white">;</div>
+                      <br />
+                      <div className="text-blue-400">interface</div>
+                      <div className="text-white"> PointProps {`{`}</div>
+                      <div className="text-white">  latitude: </div>
+                      <div className="text-blue-400">number</div>
+                      <div className="text-white">;</div>
+                      <div className="text-white">  longitude: </div>
+                      <div className="text-blue-400">number</div>
+                      <div className="text-white">;</div>
+                      <div className="text-white">  name: </div>
+                      <div className="text-blue-400">string</div>
+                      <div className="text-white">;</div>
+                      <div className="text-white">{`}`}</div>
+                      <br />
+                      <div className="text-blue-400">const</div>
+                      <div className="text-yellow-400"> CoolingPoint</div>
+                      <div className="text-white">: React.FC&lt;PointProps&gt; = ({`{`} latitude, longitude, name {`}`}) </div>
+                      <div className="text-white">{`=>`}</div>
+                      <div className="text-white"> {`{`}</div>
+                      <div className="text-white">  </div>
+                      <div className="text-blue-400">return</div>
+                      <div className="text-white"> (</div>
+                      <div className="text-white">    &lt;</div>
+                      <div className="text-green-400">div</div>
+                      <div className="text-yellow-400"> className</div>
+                      <div className="text-white">=</div>
+                      <div className="text-amber-400">"point-marker"</div>
+                      <div className="text-white">&gt;</div>
+                      <div className="text-white">      &lt;</div>
+                      <div className="text-green-400">h3</div>
+                      <div className="text-white">&gt;{`{`}name{`}`}&lt;/</div>
+                      <div className="text-green-400">h3</div>
+                      <div className="text-white">&gt;</div>
+                      <div className="text-white">      &lt;</div>
+                      <div className="text-green-400">p</div>
+                      <div className="text-white">&gt;{`{`}latitude{`}`}, {`{`}longitude{`}`}&lt;/</div>
+                      <div className="text-green-400">p</div>
+                      <div className="text-white">&gt;</div>
+                      <div className="text-white">    &lt;/</div>
+                      <div className="text-green-400">div</div>
+                      <div className="text-white">&gt;</div>
+                      <div className="text-white">  );</div>
+                      <div className="text-white">{`}`};</div>
+                      <br />
+                      <div className="text-blue-400">export default</div>
+                      <div className="text-white"> CoolingPoint;</div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-semibold text-gray-700 mb-2">Estrutura de Pastas</h4>
+                    <div className="bg-gray-100 p-3 rounded-md font-mono text-xs">
+                      <div>clima-safe/</div>
+                      <div className="pl-4">├── src/</div>
+                      <div className="pl-8">├── components/</div>
+                      <div className="pl-12">├── map/</div>
+                      <div className="pl-12">├── weather/</div>
+                      <div className="pl-12">├── ui/</div>
+                      <div className="pl-8">├── hooks/</div>
+                      <div className="pl-8">├── services/</div>
+                      <div className="pl-8">├── utils/</div>
+                      <div className="pl-8">├── pages/</div>
+                      <div className="pl-8">└── tests/</div>
+                      <div className="pl-4">├── public/</div>
+                      <div className="pl-4">└── supabase/</div>
                     </div>
                   </div>
                 </div>
