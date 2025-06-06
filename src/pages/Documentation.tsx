@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, MapPin, Users, Zap, Shield, Globe, Calendar, CheckCircle, Clock, AlertTriangle } from 'lucide-react';
+import { ChevronDown, ChevronRight, MapPin, Users, Zap, Shield, Globe, Calendar, CheckCircle, Clock, AlertTriangle, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
