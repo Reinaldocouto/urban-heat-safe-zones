@@ -4,7 +4,7 @@ import { screen } from '@testing-library/dom';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { useMapData } from '@/hooks/useMapData';
 import MapView from '@/components/map/MapView';
-import { mockGeolocationSuccess } from '../../mocks/geolocationMocks';
+import { mockGeolocationSuccess } from '../../../mocks/geolocationMocks';
 
 // Mock dos hooks
 jest.mock('@/hooks/useGeolocation');

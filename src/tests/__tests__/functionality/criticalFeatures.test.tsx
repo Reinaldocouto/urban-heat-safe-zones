@@ -6,7 +6,7 @@ import { useMapData } from '@/hooks/useMapData';
 import { getForecastByCoordinates } from '@/services/weatherService';
 import MapView from '@/components/map/MapView';
 import WeatherNotification from '@/components/map/WeatherNotification';
-import { mockWeatherData } from '../mocks/weatherMocks';
+import { mockWeatherData } from '../../mocks/weatherMocks';
 
 jest.mock('@/hooks/useGeolocation');
 jest.mock('@/hooks/useMapData');
