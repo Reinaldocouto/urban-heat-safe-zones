@@ -1,8 +1,8 @@
-
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight, MapPin, Users, Zap, Shield, Globe, Calendar, CheckCircle, Clock, AlertTriangle, FileText } from 'lucide-react';
+import { ChevronDown, ChevronRight, MapPin, Users, Zap, Shield, Globe, Calendar, CheckCircle, Clock, AlertTriangle, FileText, Download } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import jsPDF from 'jspdf';
 
 const Documentation: React.FC = () => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
@@ -29,6 +29,90 @@ const Documentation: React.FC = () => {
       {expandedSections.has(id) ? <ChevronDown className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
     </div>
   );
+
+  const downloadDocumentation = () => {
+    const doc = new jsPDF();
+    
+    // Set font and add title
+    doc.setFontSize(20);
+    doc.text("CLIMA SAFE - Documentação Técnica", 20, 20);
+    doc.setFontSize(14);
+    doc.text("Sistema de Conforto Térmico Urbano", 20, 30);
+    
+    // Add date
+    doc.setFontSize(10);
+    doc.text("Global Solution FIAP 2025 - Junho 2025", 20, 40);
+    
+    // Add sections
+    let yPosition = 50;
+    
+    // Problema e Solução
+    doc.setFontSize(16);
+    doc.text("1. Problema e Solução", 20, yPosition);
+    yPosition += 10;
+    doc.setFontSize(12);
+    doc.text("Ilhas de calor urbano afetam a saúde pública em São Paulo.", 20, yPosition);
+    yPosition += 7;
+    doc.text("Nossa solução mapeia pontos de resfriamento e oferece rotas térmicas.", 20, yPosition);
+    yPosition += 15;
+    
+    // Stack Tecnológico
+    doc.setFontSize(16);
+    doc.text("2. Stack Tecnológico", 20, yPosition);
+    yPosition += 10;
+    doc.setFontSize(12);
+    doc.text("Frontend: React, TypeScript, Vite, Tailwind CSS", 20, yPosition);
+    yPosition += 7;
+    doc.text("Backend: Supabase, PostgreSQL", 20, yPosition);
+    yPosition += 7;
+    doc.text("Mapas: MapLibre GL JS, React Map GL", 20, yPosition);
+    yPosition += 15;
+    
+    // Arquitetura
+    doc.setFontSize(16);
+    doc.text("3. Arquitetura do Sistema", 20, yPosition);
+    yPosition += 10;
+    doc.setFontSize(12);
+    doc.text("Interface React com componentes para mapa, clima e rotas", 20, yPosition);
+    yPosition += 7;
+    doc.text("Banco de dados PostgreSQL para armazenamento de pontos", 20, yPosition);
+    yPosition += 7;
+    doc.text("APIs externas para dados climáticos e geolocalização", 20, yPosition);
+    yPosition += 15;
+    
+    // Se precisar adicionar nova página
+    if (yPosition > 250) {
+      doc.addPage();
+      yPosition = 20;
+    }
+    
+    // Telas e Funcionalidades
+    doc.setFontSize(16);
+    doc.text("4. Protótipo e Funcionalidades", 20, yPosition);
+    yPosition += 10;
+    doc.setFontSize(12);
+    doc.text("Dashboard com mapa interativo", 20, yPosition);
+    yPosition += 7;
+    doc.text("Painel clima seguro com dados em tempo real", 20, yPosition);
+    yPosition += 7;
+    doc.text("Planejador de rotas térmicas", 20, yPosition);
+    yPosition += 7;
+    doc.text("Sistema de alertas e feedback comunitário", 20, yPosition);
+    yPosition += 15;
+    
+    // Adicionar mais seções...
+    
+    // Rodapé
+    doc.setFontSize(10);
+    const pageCount = doc.getNumberOfPages();
+    for(let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() - 40, doc.internal.pageSize.getHeight() - 10);
+    }
+    
+    // Salvar o PDF
+    doc.save("clima-safe-documentacao-tecnica.pdf");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-fiap-gray-light to-white">
@@ -500,11 +584,11 @@ const Documentation: React.FC = () => {
                             <div className="text-xs font-medium mb-2">Funcionalidades:</div>
                             <div className="flex items-center space-x-2 mb-1">
                               <div className="w-2 h-2 bg-fiap-red rounded-full"></div>
-                              <div className="h-2 bg-gray-200 rounded w-full"></div>
+                              <div className="h-2 bg-gray-200 rounded w-full mb-1"></div>
                             </div>
                             <div className="flex items-center space-x-2 mb-1">
                               <div className="w-2 h-2 bg-fiap-red rounded-full"></div>
-                              <div className="h-2 bg-gray-200 rounded w-full"></div>
+                              <div className="h-2 bg-gray-200 rounded w-full mb-1"></div>
                             </div>
                             <div className="flex items-center space-x-2">
                               <div className="w-2 h-2 bg-fiap-red rounded-full"></div>
@@ -928,8 +1012,9 @@ const Documentation: React.FC = () => {
                     <Button 
                       variant="outline" 
                       className="border-fiap-red text-fiap-red hover:bg-fiap-red hover:text-white"
+                      onClick={downloadDocumentation}
                     >
-                      <FileText className="h-4 w-4 mr-2" />
+                      <Download className="h-4 w-4 mr-2" />
                       Baixar Documentação Técnica Completa (PDF)
                     </Button>
                   </div>
