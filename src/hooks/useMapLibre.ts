@@ -27,8 +27,7 @@ export function useMapLibre(options: UseMapLibreOptions = {}) {
         container: mapContainer.current,
         style,
         center,
-        zoom,
-        attributionControl: true
+        zoom
       });
 
       map.current.on('load', () => {
