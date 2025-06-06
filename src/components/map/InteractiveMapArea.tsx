@@ -124,40 +124,60 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
     // Add new markers
     pontos.forEach((ponto) => {
       const el = document.createElement('div');
-      el.className = 'custom-marker';
-      el.style.width = '32px';
-      el.style.height = '32px';
-      el.style.borderRadius = '50%';
-      el.style.backgroundColor = getPointColor(ponto.tipo);
-      el.style.border = '2px solid white';
-      el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.3)';
-      el.style.display = 'flex';
-      el.style.alignItems = 'center';
-      el.style.justifyContent = 'center';
-      el.style.fontSize = '14px';
-      el.style.cursor = 'pointer';
-      el.style.transition = 'all 0.2s ease-in-out';
+      el.className = 'marker-icon';
+      
+      // Fixed CSS styles to prevent the "jumping" behavior
+      el.style.cssText = `
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: ${getPointColor(ponto.tipo)};
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.2s ease-in-out;
+        position: relative;
+        z-index: 1;
+      `;
+      
       el.textContent = getPointIcon(ponto.tipo);
 
-      // Add hover effect
-      el.addEventListener('mouseenter', () => {
+      // Add hover effect with proper event handling
+      const handleMouseEnter = () => {
         el.style.transform = 'scale(1.2)';
         el.style.zIndex = '1000';
-      });
+        
+        // Show popup on hover
+        popup.setLngLat([ponto.longitude, ponto.latitude]).addTo(map.current!);
+      };
 
-      el.addEventListener('mouseleave', () => {
+      const handleMouseLeave = () => {
         el.style.transform = 'scale(1)';
-        el.style.zIndex = 'auto';
-      });
+        el.style.zIndex = '1';
+        
+        // Hide popup on mouse leave
+        popup.remove();
+      };
 
-      // Add click handler to open point details panel
-      el.addEventListener('click', () => {
+      const handleClick = (e: Event) => {
+        e.stopPropagation();
         console.log('Marker clicked:', ponto.nome);
         onPointSelect(ponto);
-      });
+      };
 
-      // Create marker
-      const marker = new maplibregl.Marker({ element: el })
+      el.addEventListener('mouseenter', handleMouseEnter);
+      el.addEventListener('mouseleave', handleMouseLeave);
+      el.addEventListener('click', handleClick);
+
+      // Create marker with proper anchor
+      const marker = new maplibregl.Marker({ 
+        element: el,
+        anchor: 'center'
+      })
         .setLngLat([ponto.longitude, ponto.latitude])
         .addTo(map.current!);
 
@@ -165,7 +185,8 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
       const popup = new maplibregl.Popup({ 
         offset: 25,
         closeButton: false,
-        closeOnClick: false
+        closeOnClick: false,
+        anchor: 'bottom'
       }).setHTML(`
         <div class="p-3 min-w-48">
           <div class="flex items-center space-x-2 mb-2">
@@ -181,15 +202,6 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
           </p>
         </div>
       `);
-
-      // Show popup on hover
-      el.addEventListener('mouseenter', () => {
-        popup.setLngLat([ponto.longitude, ponto.latitude]).addTo(map.current!);
-      });
-
-      el.addEventListener('mouseleave', () => {
-        popup.remove();
-      });
 
       markersRef.current.push(marker);
     });
@@ -231,7 +243,7 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
       } else {
         element.style.transform = 'scale(1)';
         element.style.border = '2px solid white';
-        element.style.zIndex = 'auto';
+        element.style.zIndex = '1';
       }
     });
   }, [selectedPoint, pontos, isMapLoaded]);

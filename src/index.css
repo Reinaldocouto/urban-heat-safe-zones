@@ -166,16 +166,21 @@
   background-color: #f3f4f6;
 }
 
-/* Custom marker styles */
-.custom-marker {
-  transition: all 0.2s ease-in-out;
+/* Fixed custom marker styles to prevent jumping behavior */
+.marker-icon {
+  position: relative !important;
+  transform-origin: center center !important;
   user-select: none;
   -webkit-user-select: none;
 }
 
-.custom-marker:hover {
+.marker-icon:hover {
   transform: scale(1.1) !important;
-  z-index: 1000 !important;
+}
+
+/* Ensure MapLibre markers are properly positioned */
+.maplibregl-marker {
+  will-change: transform;
 }
 
 /* MapLibre attribution */
