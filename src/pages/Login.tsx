@@ -40,12 +40,12 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-fiap-red/10 to-fiap-gray-light flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-fiap-pink/10 to-fiap-gray-light flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 text-center">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <MapPin className="h-8 w-8 text-fiap-red" />
-            <span className="text-2xl font-bold text-fiap-red">Clima Safe</span>
+            <MapPin className="h-8 w-8 text-fiap-pink" />
+            <span className="text-2xl font-bold text-fiap-pink">Clima Safe</span>
           </div>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
@@ -87,7 +87,7 @@ const Login: React.FC = () => {
             </div>
             <Button
               type="submit"
-              className="w-full bg-fiap-red hover:bg-fiap-red/90"
+              className="w-full bg-fiap-pink hover:bg-fiap-pink/90"
               disabled={isLoading}
             >
               {isLoading ? 'Entrando...' : 'Entrar'}
@@ -96,7 +96,7 @@ const Login: React.FC = () => {
           <div className="mt-4 text-center space-y-2">
             <p className="text-sm text-gray-600">
               Não tem uma conta?{' '}
-              <Link to="/signup" className="text-fiap-red hover:underline">
+              <Link to="/signup" className="text-fiap-pink hover:underline">
                 Criar conta
               </Link>
             </p>

@@ -63,12 +63,14 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Nova cor FIAP atualizada
-				'fiap-red': 'rgb(237, 20, 91)',
-				'fiap-black': '#000000',
+				// Cores oficiais da FIAP
+				'fiap-pink': '#ed145b',
+				'fiap-dark': '#610725',
+				'fiap-light': '#f8e7ec',
 				'fiap-white': '#ffffff',
-				'fiap-gray-dark': '#333333',
-				'fiap-gray-light': '#f5f5f5'
+				'fiap-gray': '#6b7280',
+				'fiap-gray-light': '#f5f5f5',
+				'fiap-gray-dark': '#374151'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

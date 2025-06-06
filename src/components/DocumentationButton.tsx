@@ -10,7 +10,7 @@ const DocumentationButton: React.FC = () => {
       <Button 
         variant="outline" 
         size="sm" 
-        className="flex items-center space-x-2 border-fiap-red text-fiap-red hover:bg-fiap-red hover:text-white"
+        className="flex items-center space-x-2 border-fiap-pink text-fiap-pink hover:bg-fiap-pink hover:text-white"
       >
         <FileText className="h-4 w-4" />
         <span>Documentação</span>

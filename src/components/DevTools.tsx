@@ -34,7 +34,7 @@ const DevTools: React.FC = () => {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="w-full text-xs border-fiap-red text-fiap-red hover:bg-fiap-red hover:text-white"
+                    className="w-full text-xs border-fiap-pink text-fiap-pink hover:bg-fiap-pink hover:text-white"
                   >
                     <FileText className="h-3 w-3 mr-1" />
                     Documentação
@@ -53,7 +53,7 @@ const DevTools: React.FC = () => {
         onClick={toggleVisibility}
         size="sm"
         variant="outline"
-        className="bg-white shadow-lg hover:shadow-xl border-fiap-red text-fiap-red hover:bg-fiap-red hover:text-white"
+        className="bg-white shadow-lg hover:shadow-xl border-fiap-pink text-fiap-pink hover:bg-fiap-pink hover:text-white"
       >
         {isVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
       </Button>
