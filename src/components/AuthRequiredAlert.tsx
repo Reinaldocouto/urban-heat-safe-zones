@@ -21,7 +21,7 @@ const AuthRequiredAlert: React.FC<AuthRequiredAlertProps> = ({ message, feature 
       <p className="text-gray-600 mb-6">{message}</p>
       <div className="flex justify-center space-x-4">
         <Link to="/login">
-          <Button className="bg-fiap-pink hover:bg-fiap-pink/90">
+          <Button className="bg-fiap-red hover:bg-fiap-red/90">
             <LogIn className="h-4 w-4 mr-2" />
             Fazer Login
           </Button>

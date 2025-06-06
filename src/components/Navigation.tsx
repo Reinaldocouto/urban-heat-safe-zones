@@ -25,7 +25,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentTab, onChangeTab }) => {
   };
 
   return (
-    <nav className="bg-fiap-pink text-white shadow-lg">
+    <nav className="bg-fiap-red text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
@@ -43,8 +43,8 @@ const Navigation: React.FC<NavigationProps> = ({ currentTab, onChangeTab }) => {
                   onClick={() => onChangeTab(tab.id)}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-colors ${
                     currentTab === tab.id
-                      ? 'bg-white text-fiap-pink'
-                      : 'hover:bg-fiap-pink/80'
+                      ? 'bg-white text-fiap-red'
+                      : 'hover:bg-fiap-red/80'
                   }`}
                 >
                   <Icon className="h-4 w-4" />
@@ -84,7 +84,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentTab, onChangeTab }) => {
                   <Link to="/signup">
                     <Button
                       size="sm"
-                      className="bg-white text-fiap-pink hover:bg-white/90"
+                      className="bg-white text-fiap-red hover:bg-white/90"
                     >
                       <UserPlus className="h-4 w-4" />
                       <span className="hidden sm:inline ml-2">Criar Conta</span>
