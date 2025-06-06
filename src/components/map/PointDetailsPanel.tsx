@@ -4,18 +4,21 @@ import { X, MapPin, Clock, Navigation } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PontoResfriamento } from '@/services/supabaseService';
+import { ForecastData } from '@/services/weatherService';
 import { calculateDistance } from '@/utils/distance';
 
 interface PointDetailsPanelProps {
   point: PontoResfriamento;
   onClose: () => void;
   userLocation?: { lat: number; lon: number };
+  currentWeather?: ForecastData | null;
 }
 
 const PointDetailsPanel: React.FC<PointDetailsPanelProps> = ({ 
   point, 
   onClose,
-  userLocation
+  userLocation,
+  currentWeather
 }) => {
   const distance = userLocation 
     ? calculateDistance(userLocation.lat, userLocation.lon, point.latitude, point.longitude)
