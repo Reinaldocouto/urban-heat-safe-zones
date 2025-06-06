@@ -16,7 +16,7 @@ interface Feedback {
 
 const UserFeedback: React.FC = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'enviar' | 'historico'>('enviar');
+  const [activeTab, setActiveTab] = useState<'enviar' | 'historico'>('historico');
   const [feedback, setFeedback] = useState({
     pontoId: '',
     pontoNome: '',
@@ -45,17 +45,6 @@ const UserFeedback: React.FC = () => {
       timestamp: new Date('2024-01-10')
     }
   ]);
-
-  if (!user) {
-    return (
-      <div className="p-6 max-w-4xl mx-auto">
-        <AuthRequiredAlert 
-          message="Para deixar avaliações e comentários sobre os pontos de resfriamento, você precisa estar logado em sua conta."
-          feature="Envio de Feedback"
-        />
-      </div>
-    );
-  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,6 +90,16 @@ const UserFeedback: React.FC = () => {
           
           <div className="flex space-x-0">
             <button
+              onClick={() => setActiveTab('historico')}
+              className={`px-6 py-3 font-medium border-b-2 transition-colors ${
+                activeTab === 'historico'
+                  ? 'border-fiap-red text-fiap-red'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              Ver Feedbacks
+            </button>
+            <button
               onClick={() => setActiveTab('enviar')}
               className={`px-6 py-3 font-medium border-b-2 transition-colors ${
                 activeTab === 'enviar'
@@ -110,21 +109,47 @@ const UserFeedback: React.FC = () => {
             >
               Enviar Feedback
             </button>
-            <button
-              onClick={() => setActiveTab('historico')}
-              className={`px-6 py-3 font-medium border-b-2 transition-colors ${
-                activeTab === 'historico'
-                  ? 'border-fiap-red text-fiap-red'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              Histórico
-            </button>
           </div>
         </div>
 
         <div className="p-6">
-          {activeTab === 'enviar' ? (
+          {activeTab === 'historico' ? (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-fiap-gray-dark mb-4">
+                Avaliações da Comunidade
+              </h3>
+              {feedbacks.length === 0 ? (
+                <p className="text-gray-500 text-center py-8">Nenhum feedback enviado ainda.</p>
+              ) : (
+                feedbacks.map((fb) => (
+                  <div key={fb.id} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h4 className="font-semibold text-fiap-gray-dark">{fb.pontoNome}</h4>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <div className="flex space-x-1">
+                            {renderStars(fb.rating)}
+                          </div>
+                          <span className="text-sm text-gray-500">
+                            {fb.category.charAt(0).toUpperCase() + fb.category.slice(1)}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-xs text-gray-500">
+                        {fb.timestamp.toLocaleDateString('pt-BR')}
+                      </span>
+                    </div>
+                    <p className="text-gray-700">{fb.comment}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          ) : !user ? (
+            <AuthRequiredAlert 
+              message="Para deixar avaliações e comentários sobre os pontos de resfriamento, você precisa estar logado em sua conta."
+              feature="Envio de Feedback"
+            />
+          ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -197,34 +222,6 @@ const UserFeedback: React.FC = () => {
                 <span>Enviar Feedback</span>
               </button>
             </form>
-          ) : (
-            <div className="space-y-4">
-              {feedbacks.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">Nenhum feedback enviado ainda.</p>
-              ) : (
-                feedbacks.map((fb) => (
-                  <div key={fb.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <h3 className="font-semibold text-fiap-gray-dark">{fb.pontoNome}</h3>
-                        <div className="flex items-center space-x-2 mt-1">
-                          <div className="flex space-x-1">
-                            {renderStars(fb.rating)}
-                          </div>
-                          <span className="text-sm text-gray-500">
-                            {fb.category.charAt(0).toUpperCase() + fb.category.slice(1)}
-                          </span>
-                        </div>
-                      </div>
-                      <span className="text-xs text-gray-500">
-                        {fb.timestamp.toLocaleDateString('pt-BR')}
-                      </span>
-                    </div>
-                    <p className="text-gray-700">{fb.comment}</p>
-                  </div>
-                ))
-              )}
-            </div>
           )}
         </div>
       </div>
