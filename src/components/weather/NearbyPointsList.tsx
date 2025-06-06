@@ -93,7 +93,7 @@ const NearbyPointsList: React.FC<NearbyPointsListProps> = ({ userLat, userLon, p
                     📍 {point.distance.toFixed(1)} km
                   </span>
                 </div>
-                <p className="text-xs text-gray-600 mb-2">{point.endereco}</p>
+                <p className="text-xs text-gray-600 mb-2">{point.cidade}, {point.uf}</p>
                 {point.horario_funcionamento && (
                   <p className="text-xs text-gray-500">
                     🕒 {point.horario_funcionamento}

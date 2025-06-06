@@ -48,9 +48,20 @@ export function useAuth() {
 
       if (error) {
         console.error('Erro no cadastro:', error);
+        let errorMessage = error.message;
+        
+        // Traduzir mensagens de erro comuns
+        if (error.message.includes('User already registered')) {
+          errorMessage = 'Este email já está cadastrado. Tente fazer login.';
+        } else if (error.message.includes('Invalid email')) {
+          errorMessage = 'Email inválido. Verifique o formato do email.';
+        } else if (error.message.includes('Password should be')) {
+          errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
+        }
+        
         toast({
           title: "Erro no cadastro",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive",
         });
         return { error };
@@ -59,7 +70,7 @@ export function useAuth() {
       if (data.user) {
         toast({
           title: "Cadastro realizado!",
-          description: "Conta criada com sucesso.",
+          description: "Conta criada com sucesso. Você já pode fazer login.",
         });
       }
 
@@ -79,9 +90,22 @@ export function useAuth() {
 
       if (error) {
         console.error('Erro no login:', error);
+        let errorMessage = error.message;
+        
+        // Traduzir e tratar mensagens de erro específicas
+        if (error.message.includes('Email not confirmed')) {
+          errorMessage = 'Email não confirmado. Verifique sua caixa de entrada ou tente fazer login novamente em alguns minutos.';
+        } else if (error.message.includes('Invalid login credentials')) {
+          errorMessage = 'Email ou senha incorretos. Verifique suas credenciais.';
+        } else if (error.message.includes('Too many requests')) {
+          errorMessage = 'Muitas tentativas de login. Aguarde alguns minutos antes de tentar novamente.';
+        } else if (error.message.includes('User not found')) {
+          errorMessage = 'Usuário não encontrado. Verifique o email ou crie uma nova conta.';
+        }
+        
         toast({
           title: "Erro no login",
-          description: error.message,
+          description: errorMessage,
           variant: "destructive",
         });
         return { error };
