@@ -115,38 +115,45 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
 
   // Update markers when pontos change
   useEffect(() => {
-    if (!map.current || !isMapLoaded) return;
+    if (!map.current || !isMapLoaded || pontos.length === 0) return;
 
-    console.log('Adicionando marcadores:', pontos.length);
+    console.log('Adicionando marcadores para', pontos.length, 'pontos');
 
     // Remove existing markers
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    // Add new markers
+    // Add new markers - process each point individually
     pontos.forEach((ponto, index) => {
-      console.log(`Criando marcador para ${ponto.nome} em [${ponto.longitude}, ${ponto.latitude}]`);
+      // Validate coordinates
+      const lat = parseFloat(ponto.latitude.toString());
+      const lng = parseFloat(ponto.longitude.toString());
       
-      // Create marker element
+      if (isNaN(lat) || isNaN(lng)) {
+        console.warn(`Coordenadas inválidas para ${ponto.nome}: [${lng}, ${lat}]`);
+        return;
+      }
+
+      console.log(`Criando marcador ${index + 1}/${pontos.length} para ${ponto.nome} em [${lng}, ${lat}]`);
+      
+      // Create marker element with stable positioning
       const el = document.createElement('div');
       el.className = 'cooling-point-marker';
-      el.style.cssText = `
-        width: 32px;
-        height: 32px;
-        background-color: ${getPointColor(ponto.tipo)};
-        border: 2px solid white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        transition: all 0.2s ease;
-        user-select: none;
-        position: relative;
-        z-index: 1;
-      `;
+      el.style.width = '32px';
+      el.style.height = '32px';
+      el.style.backgroundColor = getPointColor(ponto.tipo);
+      el.style.border = '2px solid white';
+      el.style.borderRadius = '50%';
+      el.style.display = 'flex';
+      el.style.alignItems = 'center';
+      el.style.justifyContent = 'center';
+      el.style.fontSize = '14px';
+      el.style.cursor = 'pointer';
+      el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+      el.style.userSelect = 'none';
+      el.style.pointerEvents = 'auto';
+      el.style.position = 'relative';
+      el.style.zIndex = '100';
       el.innerHTML = getPointIcon(ponto.tipo);
 
       // Create popup for hover information
@@ -171,42 +178,59 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
         </div>
       `);
 
-      // Add event listeners
-      el.addEventListener('mouseenter', () => {
+      // Add event listeners with proper cleanup
+      const handleMouseEnter = () => {
         el.style.transform = 'scale(1.2)';
         el.style.zIndex = '1000';
-        popup.setLngLat([ponto.longitude, ponto.latitude]).addTo(map.current!);
-      });
+        popup.setLngLat([lng, lat]).addTo(map.current!);
+      };
 
-      el.addEventListener('mouseleave', () => {
+      const handleMouseLeave = () => {
         el.style.transform = 'scale(1)';
-        el.style.zIndex = '1';
+        el.style.zIndex = '100';
         popup.remove();
-      });
+      };
 
-      el.addEventListener('click', (e) => {
+      const handleClick = (e: Event) => {
         e.stopPropagation();
         console.log('Marker clicked:', ponto.nome);
         onPointSelect(ponto);
         popup.remove();
-      });
+      };
 
-      // Create MapLibre marker
-      const marker = new maplibregl.Marker({ 
-        element: el,
-        anchor: 'center'
-      })
-        .setLngLat([ponto.longitude, ponto.latitude])
-        .addTo(map.current!);
+      el.addEventListener('mouseenter', handleMouseEnter);
+      el.addEventListener('mouseleave', handleMouseLeave);
+      el.addEventListener('click', handleClick);
 
-      markersRef.current.push(marker);
+      // Create MapLibre marker with precise positioning
+      try {
+        const marker = new maplibregl.Marker({ 
+          element: el,
+          anchor: 'center',
+          // Ensure marker stays fixed to coordinates
+          draggable: false
+        })
+          .setLngLat([lng, lat])
+          .addTo(map.current!);
+
+        markersRef.current.push(marker);
+        console.log(`Marcador ${index + 1} adicionado com sucesso para ${ponto.nome}`);
+      } catch (error) {
+        console.error(`Erro ao criar marcador para ${ponto.nome}:`, error);
+      }
     });
 
+    console.log(`Total de marcadores criados: ${markersRef.current.length}`);
+
     // Fit map to show all points if there are any
-    if (pontos.length > 0) {
+    if (markersRef.current.length > 0 && pontos.length > 0) {
       const bounds = new maplibregl.LngLatBounds();
       pontos.forEach(ponto => {
-        bounds.extend([ponto.longitude, ponto.latitude]);
+        const lat = parseFloat(ponto.latitude.toString());
+        const lng = parseFloat(ponto.longitude.toString());
+        if (!isNaN(lat) && !isNaN(lng)) {
+          bounds.extend([lng, lat]);
+        }
       });
       
       map.current.fitBounds(bounds, {
@@ -220,9 +244,15 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
   useEffect(() => {
     if (!map.current || !selectedPoint || !isMapLoaded) return;
 
+    // Find the coordinates for the selected point
+    const lat = parseFloat(selectedPoint.latitude.toString());
+    const lng = parseFloat(selectedPoint.longitude.toString());
+
+    if (isNaN(lat) || isNaN(lng)) return;
+
     // Center map on selected point
     map.current.flyTo({
-      center: [selectedPoint.longitude, selectedPoint.latitude],
+      center: [lng, lat],
       zoom: 14,
       duration: 1000
     });
@@ -239,7 +269,7 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
       } else {
         element.style.transform = 'scale(1)';
         element.style.border = '2px solid white';
-        element.style.zIndex = '1';
+        element.style.zIndex = '100';
       }
     });
   }, [selectedPoint, pontos, isMapLoaded]);
