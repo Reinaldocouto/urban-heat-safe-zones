@@ -1,12 +1,13 @@
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { useMapData } from '@/hooks/useMapData';
 import { getForecastByCoordinates } from '@/services/weatherService';
 import MapView from '@/components/map/MapView';
 import WeatherNotification from '@/components/map/WeatherNotification';
-import { mockWeatherData } from '../mocks/weatherMocks';
+import { mockWeatherData } from '../../mocks/weatherMocks';
 
 jest.mock('@/hooks/useGeolocation');
 jest.mock('@/hooks/useMapData');

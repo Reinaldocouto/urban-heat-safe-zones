@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { getForecastByCoordinates } from '@/services/weatherService';
 import ClimateAlerts from '@/components/ClimateAlerts';

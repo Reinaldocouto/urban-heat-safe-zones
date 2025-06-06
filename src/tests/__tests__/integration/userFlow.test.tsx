@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/dom';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { useMapData } from '@/hooks/useMapData';
 import Index from '@/pages/Index';
-import { mockGeolocationSuccess } from '../mocks/geolocationMocks';
+import { mockGeolocationSuccess } from '../../mocks/geolocationMocks';
 
 jest.mock('@/hooks/useGeolocation');
 jest.mock('@/hooks/useMapData');
