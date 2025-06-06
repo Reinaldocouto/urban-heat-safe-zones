@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { Activity } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -146,15 +147,17 @@ const MapView = () => {
               isCalculatingRoute={isCalculatingRoute}
               hasSelectedPoint={!!selectedPoint}
             />
+          </div>
 
-            {/* Current Weather Widget - moved below route button */}
-            {userLat && userLon && !geoError && currentWeather && (
+          {/* Current Weather Widget - bottom left, positioned to not obstruct panels */}
+          {userLat && userLon && !geoError && currentWeather && (
+            <div className="absolute bottom-4 left-4 z-20">
               <CurrentWeatherWidget 
                 weatherData={currentWeather}
                 isCompact={true}
               />
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Weather Panel Toggle Button - top right */}
           {userLat && userLon && !geoError && (
