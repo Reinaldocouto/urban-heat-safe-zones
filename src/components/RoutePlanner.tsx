@@ -1,10 +1,67 @@
 
 import React, { useState } from 'react';
-import { MapPin, Route, Clock, Thermometer } from 'lucide-react';
+import { MapPin, Route, Clock, Thermometer, Navigation } from 'lucide-react';
+import { useGeolocation } from '@/hooks/useGeolocation';
+import { useToast } from '@/hooks/use-toast';
 
 const RoutePlanner: React.FC = () => {
   const [origem, setOrigem] = useState('');
   const [destino, setDestino] = useState('');
+  const { latitude, longitude } = useGeolocation();
+  const { toast } = useToast();
+
+  const validateCoordinates = (coords: string): boolean => {
+    const regex = /^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/;
+    return regex.test(coords.trim());
+  };
+
+  const useCurrentLocation = () => {
+    if (latitude && longitude) {
+      setOrigem(`${latitude}, ${longitude}`);
+      toast({
+        title: 'Localização atual definida',
+        description: 'Sua localização atual foi definida como origem.'
+      });
+    } else {
+      toast({
+        title: 'Localização não disponível',
+        description: 'Não foi possível obter sua localização atual.',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const handleCalculateRoute = () => {
+    if (!origem.trim() || !destino.trim()) {
+      toast({
+        title: 'Campos obrigatórios',
+        description: 'Por favor, preencha tanto a origem quanto o destino.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    if (!validateCoordinates(origem) || !validateCoordinates(destino)) {
+      toast({
+        title: 'Coordenadas inválidas',
+        description: 'Use o formato: latitude, longitude (ex: -23.5617, -46.6558)',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    const origemClean = origem.trim().replace(/\s+/g, '');
+    const destinoClean = destino.trim().replace(/\s+/g, '');
+    
+    const googleMapsUrl = `https://www.google.com/maps/dir/${origemClean}/${destinoClean}`;
+    
+    window.open(googleMapsUrl, '_blank');
+    
+    toast({
+      title: 'Redirecionando para Google Maps',
+      description: 'Sua rota térmica está sendo calculada no Google Maps.'
+    });
+  };
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -19,32 +76,44 @@ const RoutePlanner: React.FC = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <MapPin className="inline h-4 w-4 mr-1" />
-                Origem
+                Origem (Coordenadas)
               </label>
-              <input
-                type="text"
-                value={origem}
-                onChange={(e) => setOrigem(e.target.value)}
-                placeholder="Digite o endereço de origem"
-                className="w-full p-3 border border-gray-300 rounded-md focus:ring-fiap-red focus:border-fiap-red"
-              />
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  value={origem}
+                  onChange={(e) => setOrigem(e.target.value)}
+                  placeholder="Ex: -23.5617, -46.6558"
+                  className="flex-1 p-3 border border-gray-300 rounded-md focus:ring-fiap-red focus:border-fiap-red"
+                />
+                <button
+                  onClick={useCurrentLocation}
+                  className="px-3 py-3 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                  title="Usar localização atual"
+                >
+                  <Navigation className="h-4 w-4" />
+                </button>
+              </div>
             </div>
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <MapPin className="inline h-4 w-4 mr-1" />
-                Destino
+                Destino (Coordenadas)
               </label>
               <input
                 type="text"
                 value={destino}
                 onChange={(e) => setDestino(e.target.value)}
-                placeholder="Digite o endereço de destino"
+                placeholder="Ex: -23.5505, -46.6333"
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-fiap-red focus:border-fiap-red"
               />
             </div>
             
-            <button className="w-full bg-fiap-red text-white py-3 px-4 rounded-md hover:bg-fiap-red/90 transition-colors">
+            <button 
+              onClick={handleCalculateRoute}
+              className="w-full bg-fiap-red text-white py-3 px-4 rounded-md hover:bg-fiap-red/90 transition-colors"
+            >
               Calcular Rota Térmica
             </button>
           </div>
