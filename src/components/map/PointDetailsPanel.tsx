@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { PontoResfriamento } from '@/services/supabaseService';
 import { ForecastData } from '@/services/weatherService';
 import { calculateDistance } from '@/utils/distance';
+import { useToast } from '@/hooks/use-toast';
 
 interface PointDetailsPanelProps {
   point: PontoResfriamento;
@@ -23,6 +24,63 @@ const PointDetailsPanel: React.FC<PointDetailsPanelProps> = ({
   const distance = userLocation 
     ? calculateDistance(userLocation.lat, userLocation.lon, point.latitude, point.longitude)
     : null;
+  
+  const { toast } = useToast();
+
+  const handleNavigate = () => {
+    if (!userLocation) {
+      toast({
+        title: 'Localização não disponível',
+        description: 'Não foi possível obter sua localização atual.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    // Encode the coordinates for URL
+    const originCoords = `${userLocation.lat},${userLocation.lon}`;
+    const destinationCoords = `${point.latitude},${point.longitude}`;
+    
+    const googleMapsUrl = `https://www.google.com/maps/dir/${originCoords}/${destinationCoords}`;
+    
+    window.open(googleMapsUrl, '_blank');
+    
+    toast({
+      title: 'Redirecionando para Google Maps',
+      description: 'Sua rota está sendo calculada no Google Maps.'
+    });
+  };
+
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: `Ponto de Resfriamento: ${point.nome}`,
+        text: `Confira este ponto de resfriamento em ${point.cidade}, ${point.uf}: ${point.nome}`,
+        url: window.location.href
+      })
+      .then(() => {
+        toast({
+          title: 'Compartilhado com sucesso',
+          description: 'O local foi compartilhado.'
+        });
+      })
+      .catch((error) => {
+        console.error('Erro ao compartilhar:', error);
+        toast({
+          title: 'Erro ao compartilhar',
+          description: 'Não foi possível compartilhar este local.',
+          variant: 'destructive'
+        });
+      });
+    } else {
+      // Fallback for browsers that don't support navigator.share
+      toast({
+        title: 'Compartilhamento não suportado',
+        description: 'Seu navegador não suporta compartilhamento direto.',
+        variant: 'destructive'
+      });
+    }
+  };
 
   return (
     <div className="w-96 bg-white shadow-2xl border-l border-gray-200 overflow-y-auto">
@@ -89,11 +147,18 @@ const PointDetailsPanel: React.FC<PointDetailsPanelProps> = ({
 
         {/* Action Buttons */}
         <div className="space-y-2">
-          <Button className="w-full bg-fiap-red hover:bg-fiap-red/90 text-white">
+          <Button 
+            className="w-full bg-fiap-red hover:bg-fiap-red/90 text-white"
+            onClick={handleNavigate}
+          >
             <Navigation className="h-4 w-4 mr-2" />
             Como chegar
           </Button>
-          <Button variant="outline" className="w-full border-fiap-red text-fiap-red hover:bg-fiap-red/10">
+          <Button 
+            variant="outline" 
+            className="w-full border-fiap-red text-fiap-red hover:bg-fiap-red/10"
+            onClick={handleShare}
+          >
             <MapPin className="h-4 w-4 mr-2" />
             Compartilhar
           </Button>
