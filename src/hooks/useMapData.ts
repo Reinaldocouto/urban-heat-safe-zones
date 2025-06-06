@@ -11,7 +11,7 @@ export function useMapData() {
   const useMock = import.meta.env.VITE_USE_MOCK === 'true';
 
   useEffect(() => {
-    async function load() {
+    async function loadData() {
       setLoading(true);
       setError(null);
       
@@ -21,25 +21,44 @@ export function useMapData() {
           setPontos(mockPontos);
         } else {
           console.log('Buscando dados do Supabase');
-          const reais = await fetchPontos();
-          if (reais.length === 0) {
-            console.log('Nenhum dado do Supabase, usando mock');
+          const dados = await fetchPontos();
+          
+          if (dados.length === 0) {
+            console.log('Nenhum dado encontrado no Supabase, usando mock como fallback');
             setPontos(mockPontos);
           } else {
-            setPontos(reais);
+            console.log(`${dados.length} pontos carregados do Supabase`);
+            setPontos(dados);
           }
         }
       } catch (err) {
         console.error('Erro ao carregar pontos:', err);
         setError('Erro ao carregar pontos de resfriamento');
-        setPontos(mockPontos); // Fallback para mock em caso de erro
+        // Fallback para mock em caso de erro
+        setPontos(mockPontos);
       } finally {
         setLoading(false);
       }
     }
     
-    load();
+    loadData();
   }, [useMock]);
 
-  return { pontos, loading, error };
+  const refetchData = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const dados = await fetchPontos();
+      setPontos(dados.length > 0 ? dados : mockPontos);
+    } catch (err) {
+      console.error('Erro ao recarregar pontos:', err);
+      setError('Erro ao recarregar pontos');
+      setPontos(mockPontos);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { pontos, loading, error, refetchData };
 }

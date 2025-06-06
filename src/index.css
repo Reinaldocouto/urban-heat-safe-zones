@@ -88,50 +88,82 @@
 }
 
 /* MapLibre GL CSS customizations */
+.maplibregl-map {
+  width: 100%;
+  height: 100%;
+  font-family: "Inter", sans-serif;
+}
+
 .maplibregl-popup {
   max-width: 300px;
+  z-index: 1000;
 }
 
 .maplibregl-popup-content {
   padding: 0;
   border-radius: 8px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: white;
 }
 
 .maplibregl-popup-tip {
-  border-top-color: white;
+  border-top-color: white !important;
 }
 
 .maplibregl-ctrl-group {
   border-radius: 8px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: white;
 }
 
 .maplibregl-ctrl button {
   border-radius: 6px;
+  background: white;
+}
+
+.maplibregl-ctrl button:hover {
+  background-color: #f3f4f6;
 }
 
 /* Custom marker styles */
-.marker {
+.custom-marker {
   transition: all 0.2s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.marker:hover {
+.custom-marker:hover {
   transform: scale(1.1) !important;
+  z-index: 1000 !important;
 }
 
-/* Ensure map container takes full space */
-.maplibregl-map {
-  width: 100%;
-  height: 100%;
+/* MapLibre attribution */
+.maplibregl-ctrl-attrib {
+  font-size: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin: 0;
 }
 
 /* Loading animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .maplibregl-popup {
   animation: fadeIn 0.2s ease-in-out;
+}
+
+/* Ensure proper z-index stacking */
+.maplibregl-canvas-container {
+  position: relative;
+}
+
+.maplibregl-control-container {
+  position: absolute;
+  pointer-events: none;
+}
+
+.maplibregl-control-container > * {
+  pointer-events: auto;
 }

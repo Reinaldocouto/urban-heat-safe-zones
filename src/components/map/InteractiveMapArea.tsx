@@ -44,45 +44,78 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
 
   useEffect(() => {
     if (!mapContainer.current) return;
 
-    // Initialize MapLibre map
-    map.current = new maplibregl.Map({
-      container: mapContainer.current,
-      style: 'https://api.maptiler.com/maps/streets/style.json?key=demo', // Using demo style
-      center: [-46.6333, -23.5505], // São Paulo center
-      zoom: 10,
-      pitch: 0,
-      bearing: 0
-    });
+    try {
+      // Initialize MapLibre map with OpenStreetMap tiles (free and reliable)
+      map.current = new maplibregl.Map({
+        container: mapContainer.current,
+        style: {
+          version: 8,
+          sources: {
+            osm: {
+              type: 'raster',
+              tiles: ['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],
+              tileSize: 256,
+              attribution: '© OpenStreetMap contributors'
+            }
+          },
+          layers: [
+            {
+              id: 'osm',
+              type: 'raster',
+              source: 'osm'
+            }
+          ]
+        },
+        center: [-46.6333, -23.5505], // São Paulo center
+        zoom: 10,
+        pitch: 0,
+        bearing: 0
+      });
 
-    // Add navigation controls
-    map.current.addControl(
-      new maplibregl.NavigationControl({
-        visualizePitch: true,
-        showZoom: true,
-        showCompass: true
-      }),
-      'top-right'
-    );
+      map.current.on('load', () => {
+        console.log('MapLibre carregado com sucesso');
+        setIsMapLoaded(true);
+      });
 
-    // Add scale control
-    map.current.addControl(new maplibregl.ScaleControl(), 'bottom-left');
+      map.current.on('error', (e) => {
+        console.error('Erro no MapLibre:', e);
+      });
+
+      // Add navigation controls
+      map.current.addControl(
+        new maplibregl.NavigationControl({
+          visualizePitch: true,
+          showZoom: true,
+          showCompass: true
+        }),
+        'top-right'
+      );
+
+      // Add scale control
+      map.current.addControl(new maplibregl.ScaleControl(), 'bottom-left');
+
+    } catch (error) {
+      console.error('Erro ao inicializar MapLibre:', error);
+    }
 
     // Cleanup function
     return () => {
       if (map.current) {
         map.current.remove();
         map.current = null;
+        setIsMapLoaded(false);
       }
     };
   }, []);
 
   // Update markers when pontos change
   useEffect(() => {
-    if (!map.current) return;
+    if (!map.current || !isMapLoaded) return;
 
     // Remove existing markers
     markersRef.current.forEach(marker => marker.remove());
@@ -91,7 +124,7 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
     // Add new markers
     pontos.forEach((ponto) => {
       const el = document.createElement('div');
-      el.className = 'marker';
+      el.className = 'custom-marker';
       el.style.width = '32px';
       el.style.height = '32px';
       el.style.borderRadius = '50%';
@@ -103,7 +136,7 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
       el.style.justifyContent = 'center';
       el.style.fontSize = '14px';
       el.style.cursor = 'pointer';
-      el.style.transition = 'transform 0.2s';
+      el.style.transition = 'all 0.2s ease-in-out';
       el.textContent = getPointIcon(ponto.tipo);
 
       // Add hover effect
@@ -133,12 +166,12 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
         closeButton: false,
         closeOnClick: false
       }).setHTML(`
-        <div class="p-2">
-          <div class="flex items-center space-x-2 mb-1">
+        <div class="p-3 min-w-48">
+          <div class="flex items-center space-x-2 mb-2">
             <span class="text-lg">${getPointIcon(ponto.tipo)}</span>
-            <h4 class="font-semibold text-sm">${ponto.nome}</h4>
+            <h4 class="font-semibold text-sm text-gray-800">${ponto.nome}</h4>
           </div>
-          <p class="text-xs text-gray-600 mb-1">${ponto.descricao}</p>
+          <p class="text-xs text-gray-600 mb-2">${ponto.descricao}</p>
           <p class="text-xs text-gray-500">
             <strong>Horário:</strong> ${ponto.horario_funcionamento}
           </p>
@@ -169,11 +202,11 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
         maxZoom: 15
       });
     }
-  }, [pontos, onPointSelect]);
+  }, [pontos, onPointSelect, isMapLoaded]);
 
   // Highlight selected point
   useEffect(() => {
-    if (!map.current || !selectedPoint) return;
+    if (!map.current || !selectedPoint || !isMapLoaded) return;
 
     // Center map on selected point
     map.current.flyTo({
@@ -197,7 +230,7 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
         element.style.zIndex = 'auto';
       }
     });
-  }, [selectedPoint, pontos]);
+  }, [selectedPoint, pontos, isMapLoaded]);
 
   return (
     <div className="relative w-full h-full">
@@ -205,11 +238,13 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
       <div ref={mapContainer} className="absolute inset-0 rounded-lg" />
 
       {/* Loading overlay */}
-      {pontos.length === 0 && (
+      {(!isMapLoaded || pontos.length === 0) && (
         <div className="absolute inset-0 bg-white/90 backdrop-blur-sm flex items-center justify-center rounded-lg">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-fiap-red mx-auto mb-2"></div>
-            <p className="text-sm text-gray-600">Carregando pontos no mapa...</p>
+            <p className="text-sm text-gray-600">
+              {!isMapLoaded ? 'Carregando mapa...' : 'Carregando pontos no mapa...'}
+            </p>
           </div>
         </div>
       )}
