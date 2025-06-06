@@ -49,3 +49,4 @@ print_status $? "Testes de funcionalidades críticas"
 
 echo -e "\n🏁 Execução completa!"
 echo "📊 Verifique o relatório de cobertura em: coverage/lcov-report/index.html"
+

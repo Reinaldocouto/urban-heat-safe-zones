@@ -44,7 +44,7 @@ const Documentation: React.FC = () => {
           
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 mb-8">
             <h3 className="text-2xl font-semibold mb-4">Documentação Técnica e Acadêmica</h3>
-            <p className="text-xl">Global Solution FIAP 2024</p>
+            <p className="text-xl">Global Solution FIAP 2025</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-6 mt-12">
@@ -67,7 +67,7 @@ const Documentation: React.FC = () => {
         </div>
         
         <div className="absolute bottom-8 text-center">
-          <p className="text-lg">Dezembro 2024</p>
+          <p className="text-lg">Junho 2025</p>
           <p className="text-sm opacity-80">Versão 1.0</p>
         </div>
       </div>
@@ -588,9 +588,9 @@ const Documentation: React.FC = () => {
         <div className="mt-12 text-center p-8 bg-fiap-red text-white rounded-lg">
           <h2 className="text-2xl font-bold mb-4">CLIMA SAFE</h2>
           <p className="text-lg mb-2">Sistema de Conforto Térmico Urbano</p>
-          <p className="opacity-80">Global Solution FIAP 2024 - Mudanças Climáticas</p>
+          <p className="opacity-80">Global Solution FIAP 2025 - Mudanças Climáticas</p>
           <div className="mt-4 pt-4 border-t border-white/20">
-            <p className="text-sm">Documentação Técnica e Acadêmica - Versão 1.0 - Dezembro 2024</p>
+            <p className="text-sm">Documentação Técnica e Acadêmica - Versão 1.0 - Junho 2025</p>
           </div>
         </div>
       </div>

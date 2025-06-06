@@ -4,6 +4,7 @@ import { Settings, Eye, EyeOff, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import TestRunnerButton from './TestRunnerButton';
 
 const DevTools: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -28,7 +29,7 @@ const DevTools: React.FC = () => {
               <div className="text-xs text-gray-600">
                 <strong>Versão:</strong> 1.0.0
               </div>
-              <div className="flex space-x-2 pt-2">
+              <div className="flex flex-col space-y-2 pt-2">
                 <Link to="/documentation" target="_blank" className="flex-1">
                   <Button 
                     variant="outline" 
@@ -36,9 +37,12 @@ const DevTools: React.FC = () => {
                     className="w-full text-xs border-fiap-red text-fiap-red hover:bg-fiap-red hover:text-white"
                   >
                     <FileText className="h-3 w-3 mr-1" />
-                    Docs
+                    Documentação
                   </Button>
                 </Link>
+                <div className="flex-1">
+                  <TestRunnerButton />
+                </div>
               </div>
             </div>
           </CardContent>
