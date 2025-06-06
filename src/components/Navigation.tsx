@@ -1,6 +1,8 @@
 
 import React from 'react';
-import { MapPin, Route, AlertTriangle, MessageCircle } from 'lucide-react';
+import { MapPin, Route, AlertTriangle, MessageCircle, LogOut } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
 
 interface NavigationProps {
   currentTab: 'map' | 'routes' | 'alerts' | 'feedback';
@@ -8,12 +10,18 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ currentTab, onChangeTab }) => {
+  const { signOut, user } = useAuth();
+
   const tabs = [
     { id: 'map' as const, label: 'Mapa', icon: MapPin },
     { id: 'routes' as const, label: 'Rotas', icon: Route },
     { id: 'alerts' as const, label: 'Alertas', icon: AlertTriangle },
     { id: 'feedback' as const, label: 'Feedback', icon: MessageCircle },
   ];
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <nav className="bg-fiap-red text-white shadow-lg">
@@ -25,7 +33,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentTab, onChangeTab }) => {
             <span className="text-sm opacity-75">FIAP Climate</span>
           </div>
           
-          <div className="flex space-x-1">
+          <div className="flex items-center space-x-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
@@ -43,6 +51,23 @@ const Navigation: React.FC<NavigationProps> = ({ currentTab, onChangeTab }) => {
                 </button>
               );
             })}
+            
+            <div className="ml-4 flex items-center space-x-2">
+              {user && (
+                <span className="text-sm opacity-75 hidden sm:inline">
+                  Olá, {user.email?.split('@')[0]}
+                </span>
+              )}
+              <Button
+                onClick={handleSignOut}
+                variant="ghost"
+                size="sm"
+                className="text-white hover:bg-white/20"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline ml-2">Sair</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>

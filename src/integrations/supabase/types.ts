@@ -48,6 +48,24 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id: string
+          name?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string | null
+        }
+        Relationships: []
+      }
       tarefas: {
         Row: {
           datacriacao: string

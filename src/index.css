@@ -39,6 +39,10 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* FIAP Colors */
+    --fiap-red: 220 100% 50%;
+    --fiap-gray-light: 220 13% 96%;
   }
 
   .dark {
@@ -85,6 +89,43 @@
     @apply bg-background text-foreground;
     font-family: "Inter", sans-serif;
   }
+}
+
+/* Custom FIAP Colors */
+.text-fiap-red {
+  color: hsl(var(--fiap-red));
+}
+
+.bg-fiap-red {
+  background-color: hsl(var(--fiap-red));
+}
+
+.bg-fiap-red\/10 {
+  background-color: hsl(var(--fiap-red) / 0.1);
+}
+
+.bg-fiap-red\/80 {
+  background-color: hsl(var(--fiap-red) / 0.8);
+}
+
+.bg-fiap-red\/90 {
+  background-color: hsl(var(--fiap-red) / 0.9);
+}
+
+.hover\:bg-fiap-red\/90:hover {
+  background-color: hsl(var(--fiap-red) / 0.9);
+}
+
+.hover\:bg-fiap-red\/80:hover {
+  background-color: hsl(var(--fiap-red) / 0.8);
+}
+
+.bg-fiap-gray-light {
+  background-color: hsl(var(--fiap-gray-light));
+}
+
+.border-fiap-red {
+  border-color: hsl(var(--fiap-red));
 }
 
 /* MapLibre GL CSS customizations */
