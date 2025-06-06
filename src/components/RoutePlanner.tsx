@@ -1,10 +1,24 @@
 
 import React, { useState } from 'react';
 import { MapPin, Route, Clock, Thermometer } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import AuthRequiredAlert from './AuthRequiredAlert';
 
 const RoutePlanner: React.FC = () => {
   const [origem, setOrigem] = useState('');
   const [destino, setDestino] = useState('');
+  const { user } = useAuth();
+
+  if (!user) {
+    return (
+      <div className="p-6 max-w-4xl mx-auto">
+        <AuthRequiredAlert 
+          message="Para planejar rotas térmicas personalizadas, você precisa estar logado em sua conta."
+          feature="Planejamento de Rotas"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto">

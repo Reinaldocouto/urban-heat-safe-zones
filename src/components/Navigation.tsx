@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { MapPin, Route, AlertTriangle, MessageCircle, LogOut } from 'lucide-react';
+import { MapPin, Route, AlertTriangle, MessageCircle, LogOut, LogIn, UserPlus } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 
@@ -53,20 +54,44 @@ const Navigation: React.FC<NavigationProps> = ({ currentTab, onChangeTab }) => {
             })}
             
             <div className="ml-4 flex items-center space-x-2">
-              {user && (
-                <span className="text-sm opacity-75 hidden sm:inline">
-                  Olá, {user.email?.split('@')[0]}
-                </span>
+              {user ? (
+                <>
+                  <span className="text-sm opacity-75 hidden sm:inline">
+                    Olá, {user.email?.split('@')[0]}
+                  </span>
+                  <Button
+                    onClick={handleSignOut}
+                    variant="ghost"
+                    size="sm"
+                    className="text-white hover:bg-white/20"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span className="hidden sm:inline ml-2">Sair</span>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-white hover:bg-white/20 border border-white/30"
+                    >
+                      <LogIn className="h-4 w-4" />
+                      <span className="hidden sm:inline ml-2">Login</span>
+                    </Button>
+                  </Link>
+                  <Link to="/signup">
+                    <Button
+                      size="sm"
+                      className="bg-white text-fiap-red hover:bg-white/90"
+                    >
+                      <UserPlus className="h-4 w-4" />
+                      <span className="hidden sm:inline ml-2">Criar Conta</span>
+                    </Button>
+                  </Link>
+                </>
               )}
-              <Button
-                onClick={handleSignOut}
-                variant="ghost"
-                size="sm"
-                className="text-white hover:bg-white/20"
-              >
-                <LogOut className="h-4 w-4" />
-                <span className="hidden sm:inline ml-2">Sair</span>
-              </Button>
             </div>
           </div>
         </div>

@@ -48,7 +48,7 @@ const Login: React.FC = () => {
           </div>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
-            Entre com sua conta para acessar o sistema
+            Entre com sua conta para acessar funcionalidades exclusivas
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -83,13 +83,16 @@ const Login: React.FC = () => {
               {isLoading ? 'Entrando...' : 'Entrar'}
             </Button>
           </form>
-          <div className="mt-4 text-center">
+          <div className="mt-4 text-center space-y-2">
             <p className="text-sm text-gray-600">
               Não tem uma conta?{' '}
               <Link to="/signup" className="text-fiap-red hover:underline">
                 Criar conta
               </Link>
             </p>
+            <Link to="/" className="text-sm text-gray-500 hover:underline block">
+              Voltar ao mapa
+            </Link>
           </div>
         </CardContent>
       </Card>

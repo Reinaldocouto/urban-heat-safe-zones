@@ -53,7 +53,7 @@ const Signup: React.FC = () => {
           </div>
           <CardTitle className="text-2xl">Criar Conta</CardTitle>
           <CardDescription>
-            Cadastre-se para acessar o sistema
+            Cadastre-se para acessar funcionalidades exclusivas
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -103,13 +103,16 @@ const Signup: React.FC = () => {
               {isLoading ? 'Criando conta...' : 'Criar conta'}
             </Button>
           </form>
-          <div className="mt-4 text-center">
+          <div className="mt-4 text-center space-y-2">
             <p className="text-sm text-gray-600">
               Já tem uma conta?{' '}
               <Link to="/login" className="text-fiap-red hover:underline">
                 Fazer login
               </Link>
             </p>
+            <Link to="/" className="text-sm text-gray-500 hover:underline block">
+              Voltar ao mapa
+            </Link>
           </div>
         </CardContent>
       </Card>

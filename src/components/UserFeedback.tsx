@@ -1,6 +1,8 @@
 
 import React, { useState } from 'react';
 import { MessageCircle, Star, Send, MapPin } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import AuthRequiredAlert from './AuthRequiredAlert';
 
 interface Feedback {
   id: string;
@@ -13,6 +15,7 @@ interface Feedback {
 }
 
 const UserFeedback: React.FC = () => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'enviar' | 'historico'>('enviar');
   const [feedback, setFeedback] = useState({
     pontoId: '',
@@ -42,6 +45,17 @@ const UserFeedback: React.FC = () => {
       timestamp: new Date('2024-01-10')
     }
   ]);
+
+  if (!user) {
+    return (
+      <div className="p-6 max-w-4xl mx-auto">
+        <AuthRequiredAlert 
+          message="Para deixar avaliações e comentários sobre os pontos de resfriamento, você precisa estar logado em sua conta."
+          feature="Envio de Feedback"
+        />
+      </div>
+    );
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
