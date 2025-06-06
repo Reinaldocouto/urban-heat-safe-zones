@@ -30,8 +30,10 @@ const Navigation: React.FC<NavigationProps> = ({ currentTab, onChangeTab }) => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
             <MapPin className="h-8 w-8" />
-            <h1 className="text-xl font-bold">Clima Safe</h1>
-            <span className="text-sm opacity-75">FIAP Climate</span>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold">Clima Safe</h1>
+              <span className="text-xs opacity-75 mt-1">FIAP Sistemas 4SIOA - 2025/1</span>
+            </div>
           </div>
           
           <div className="flex items-center space-x-1">
