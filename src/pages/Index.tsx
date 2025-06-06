@@ -10,6 +10,12 @@ import DevTools from '@/components/DevTools';
 const Index: React.FC = () => {
   const [tab, setTab] = useState<'map' | 'routes' | 'alerts' | 'feedback'>('map');
 
+  // Mostrar DevTools em desenvolvimento, preview e staging (apenas ocultar em produção real)
+  const showDevTools = import.meta.env.DEV || 
+                       window.location.hostname.includes('lovable.app') ||
+                       window.location.hostname.includes('vercel.app') ||
+                       import.meta.env.MODE !== 'production';
+
   return (
     <div className="h-screen flex flex-col bg-fiap-gray-light">
       <Navigation currentTab={tab} onChangeTab={setTab} />
@@ -20,8 +26,8 @@ const Index: React.FC = () => {
         {tab === 'feedback' && <UserFeedback />}
       </div>
       
-      {/* DevTools - apenas em desenvolvimento */}
-      {import.meta.env.DEV && <DevTools />}
+      {/* DevTools - aparece em desenvolvimento, preview e staging */}
+      {showDevTools && <DevTools />}
     </div>
   );
 };
