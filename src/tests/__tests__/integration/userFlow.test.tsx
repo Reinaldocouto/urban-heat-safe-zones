@@ -1,7 +1,8 @@
 
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
+import { fireEvent } from '@testing-library/user-event';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { useMapData } from '@/hooks/useMapData';
 import Index from '@/pages/Index';
