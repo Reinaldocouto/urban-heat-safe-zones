@@ -5,6 +5,7 @@ import MapView from '@/components/map/MapView';
 import RoutePlanner from '@/components/RoutePlanner';
 import ClimateAlerts from '@/components/ClimateAlerts';
 import UserFeedback from '@/components/UserFeedback';
+import DevTools from '@/components/DevTools';
 
 const Index: React.FC = () => {
   const [tab, setTab] = useState<'map' | 'routes' | 'alerts' | 'feedback'>('map');
@@ -18,6 +19,9 @@ const Index: React.FC = () => {
         {tab === 'alerts' && <ClimateAlerts />}
         {tab === 'feedback' && <UserFeedback />}
       </div>
+      
+      {/* DevTools - apenas em desenvolvimento */}
+      {import.meta.env.DEV && <DevTools />}
     </div>
   );
 };
