@@ -166,14 +166,15 @@
   background-color: #f3f4f6;
 }
 
-/* Cooling point marker styles */
-.cooling-point-marker {
+/* STATIC cooling point marker styles - SEM hover effects */
+.static-cooling-marker {
   pointer-events: auto !important;
+  transition: none !important; /* Remove todas as transições */
 }
 
-/* Ensure MapLibre markers are properly positioned */
+/* Ensure MapLibre markers are properly positioned - SEM modificações dinâmicas */
 .maplibregl-marker {
-  will-change: transform;
+  will-change: auto; /* Remove will-change que pode causar problemas */
   pointer-events: auto;
 }
 
@@ -182,16 +183,6 @@
   font-size: 10px;
   background-color: rgba(255, 255, 255, 0.8);
   margin: 0;
-}
-
-/* Loading animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.maplibregl-popup {
-  animation: fadeIn 0.2s ease-in-out;
 }
 
 /* Ensure proper z-index stacking */

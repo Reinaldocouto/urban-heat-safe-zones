@@ -45,7 +45,6 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
   const map = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
-  const [hoveredMarkerId, setHoveredMarkerId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -124,7 +123,7 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    // Add new markers with FIXED positioning and stable hover
+    // Add new markers with STATIC styling - sem hover effects
     pontos.forEach((ponto, index) => {
       // Handle different data types for coordinates
       let lat: number;
@@ -154,107 +153,43 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
 
       console.log(`Criando marcador ${index + 1}/${pontos.length} para ${ponto.nome} em coordenadas: [${lng}, ${lat}]`);
       
-      // Create marker element with STATIC styling
+      // Create STATIC marker element - SEM position, transform ou hover effects
       const el = document.createElement('div');
-      el.className = 'cooling-point-marker';
+      el.className = 'static-cooling-marker';
       el.setAttribute('data-marker-id', ponto.id);
+      el.setAttribute('title', `${ponto.nome} - ${ponto.descricao}`);
       
-      // STATIC styling - sem position absolute ou transform manual
-      el.style.cssText = `
-        width: 32px;
-        height: 32px;
-        background-color: ${getPointColor(ponto.tipo)};
-        border: 2px solid white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 14px;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        user-select: none;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        z-index: 100;
-      `;
+      // CSS ESTÁTICO - sem transforms manuais
+      el.style.width = '28px';
+      el.style.height = '28px';
+      el.style.backgroundColor = getPointColor(ponto.tipo);
+      el.style.border = '2px solid white';
+      el.style.borderRadius = '50%';
+      el.style.display = 'flex';
+      el.style.alignItems = 'center';
+      el.style.justifyContent = 'center';
+      el.style.fontSize = '12px';
+      el.style.cursor = 'pointer';
+      el.style.boxShadow = '0 2px 6px rgba(0,0,0,0.25)';
+      el.style.userSelect = 'none';
+      el.style.pointerEvents = 'auto';
+      
       el.innerHTML = getPointIcon(ponto.tipo);
 
-      // Create persistent popup (não remove automaticamente)
-      const popup = new maplibregl.Popup({ 
-        offset: 25,
-        closeButton: false,
-        closeOnClick: false,
-        anchor: 'bottom',
-        className: 'marker-popup'
-      }).setHTML(`
-        <div class="p-3 min-w-48">
-          <div class="flex items-center space-x-2 mb-2">
-            <span class="text-lg">${getPointIcon(ponto.tipo)}</span>
-            <h4 class="font-semibold text-sm text-gray-800">${ponto.nome}</h4>
-          </div>
-          <p class="text-xs text-gray-600 mb-2">${ponto.descricao}</p>
-          <p class="text-xs text-gray-500">
-            <strong>Horário:</strong> ${ponto.horario_funcionamento}
-          </p>
-          <p class="text-xs text-blue-600 font-medium mt-1">
-            👆 Clique para ver detalhes
-          </p>
-        </div>
-      `);
-
-      // Event listeners com debounce para evitar conflitos
-      let hoverTimeout: NodeJS.Timeout;
-      let isHovering = false;
-
-      const handleMouseEnter = () => {
-        if (hoverTimeout) clearTimeout(hoverTimeout);
-        if (!isHovering) {
-          isHovering = true;
-          setHoveredMarkerId(ponto.id);
-          
-          // Scale up effect
-          el.style.transform = 'scale(1.2)';
-          el.style.boxShadow = '0 4px 12px rgba(0,0,0,0.4)';
-          el.style.zIndex = '1001';
-          
-          // Show popup
-          popup.setLngLat([lng, lat]).addTo(map.current!);
-        }
-      };
-
-      const handleMouseLeave = () => {
-        hoverTimeout = setTimeout(() => {
-          if (isHovering) {
-            isHovering = false;
-            setHoveredMarkerId(null);
-            
-            // Reset scale
-            el.style.transform = 'scale(1)';
-            el.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
-            el.style.zIndex = '100';
-            
-            // Hide popup
-            popup.remove();
-          }
-        }, 100); // Small delay to prevent flickering
-      };
-
+      // APENAS click event - sem hover
       const handleClick = (e: Event) => {
         e.stopPropagation();
         console.log('Marker clicked:', ponto.nome);
         onPointSelect(ponto);
-        popup.remove();
       };
 
-      // Add event listeners
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
       el.addEventListener('click', handleClick);
 
-      // Create MapLibre marker with center anchor
+      // Create MapLibre marker with bottom anchor para evitar problemas de posicionamento
       try {
         const marker = new maplibregl.Marker({ 
           element: el,
-          anchor: 'center' // MapLibre handles positioning automatically
+          anchor: 'bottom' // Use bottom anchor para posicionamento mais estável
         })
           .setLngLat([lng, lat])
           .addTo(map.current!);
@@ -286,7 +221,7 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
     }
   }, [pontos, onPointSelect, isMapLoaded]);
 
-  // Highlight selected point
+  // Highlight selected point - SEM alterações dinâmicas de estilo
   useEffect(() => {
     if (!map.current || !selectedPoint || !isMapLoaded) return;
 
@@ -302,22 +237,20 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
       duration: 1000
     });
 
-    // Update marker styles to highlight selected
+    // Update marker styles to highlight selected - APENAS border
     markersRef.current.forEach((marker, index) => {
       const ponto = pontos[index];
       const element = marker.getElement();
       
       if (ponto && ponto.id === selectedPoint.id) {
-        element.style.transform = 'scale(1.3)';
         element.style.border = '3px solid #ed145b';
-        element.style.zIndex = '1001';
-      } else if (hoveredMarkerId !== ponto?.id) {
-        element.style.transform = 'scale(1)';
+        element.style.zIndex = '1000';
+      } else {
         element.style.border = '2px solid white';
         element.style.zIndex = '100';
       }
     });
-  }, [selectedPoint, pontos, isMapLoaded, hoveredMarkerId]);
+  }, [selectedPoint, pontos, isMapLoaded]);
 
   return (
     <div className="relative w-full h-full">
