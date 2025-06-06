@@ -1,8 +1,6 @@
-
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { screen } from '@testing-library/dom';
-import { fireEvent } from '@testing-library/user-event';
 import MapControls from '@/components/map/MapControls';
 
 describe('MapControls Component', () => {
