@@ -150,8 +150,9 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
         el.style.zIndex = 'auto';
       });
 
-      // Add click handler
+      // Add click handler to open point details panel
       el.addEventListener('click', () => {
+        console.log('Marker clicked:', ponto.nome);
         onPointSelect(ponto);
       });
 
@@ -160,7 +161,7 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
         .setLngLat([ponto.longitude, ponto.latitude])
         .addTo(map.current!);
 
-      // Create popup
+      // Create popup for hover information
       const popup = new maplibregl.Popup({ 
         offset: 25,
         closeButton: false,
@@ -174,6 +175,9 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
           <p class="text-xs text-gray-600 mb-2">${ponto.descricao}</p>
           <p class="text-xs text-gray-500">
             <strong>Horário:</strong> ${ponto.horario_funcionamento}
+          </p>
+          <p class="text-xs text-blue-600 font-medium mt-1">
+            👆 Clique para ver detalhes
           </p>
         </div>
       `);
@@ -272,6 +276,9 @@ const InteractiveMapArea: React.FC<InteractiveMapAreaProps> = ({
             <span>Abrigos</span>
           </div>
         </div>
+        <p className="text-xs text-gray-500 mt-2 border-t pt-2">
+          👆 Clique nos ícones para ver detalhes
+        </p>
       </div>
     </div>
   );
