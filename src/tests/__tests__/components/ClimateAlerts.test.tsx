@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { render, screen, waitFor } from '../utils/test-utils';
+import { render, screen, waitFor } from '@testing-library/react';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { getForecastByCoordinates } from '@/services/weatherService';
 import ClimateAlerts from '@/components/ClimateAlerts';
-import { mockHighTemperatureWeather } from '../mocks/weatherMocks';
+import { mockHighTemperatureWeather } from '../../mocks/weatherMocks';
 
 jest.mock('@/hooks/useGeolocation');
 jest.mock('@/services/weatherService');

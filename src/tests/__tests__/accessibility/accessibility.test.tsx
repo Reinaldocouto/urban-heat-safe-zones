@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, screen } from '../utils/test-utils';
+import { render, screen } from '@testing-library/react';
 import MapView from '@/components/map/MapView';
 import RoutePlanner from '@/components/RoutePlanner';
 import ClimateAlerts from '@/components/ClimateAlerts';

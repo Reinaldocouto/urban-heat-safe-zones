@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '../utils/test-utils';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { useMapData } from '@/hooks/useMapData';
 import Index from '@/pages/Index';
@@ -23,8 +23,8 @@ describe('Fluxo Integrado do Usuário', () => {
       longitude: -46.6573,
       descricao: 'Grande parque urbano',
       horario_funcionamento: '5:00 - 00:00',
-      endereco: 'Av. Paulista, 1578',
-      contato: '(11) 3000-0000'
+      cidade: 'São Paulo',
+      uf: 'SP'
     }
   ];
 

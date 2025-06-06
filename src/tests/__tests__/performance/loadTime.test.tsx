@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, waitFor } from '../utils/test-utils';
+import { render, waitFor } from '@testing-library/react';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { useMapData } from '@/hooks/useMapData';
 import MapView from '@/components/map/MapView';
@@ -53,8 +53,8 @@ describe('Testes de Performance', () => {
       longitude: -46.6333 + (Math.random() - 0.5) * 0.1,
       descricao: `Descrição do ponto ${i}`,
       horario_funcionamento: '24h',
-      endereco: `Endereço ${i}`,
-      contato: '(11) 0000-0000'
+      cidade: 'São Paulo',
+      uf: 'SP'
     }));
 
     mockUseMapData.mockReturnValue({

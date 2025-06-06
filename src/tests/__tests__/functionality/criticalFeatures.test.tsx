@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '../utils/test-utils';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { useMapData } from '@/hooks/useMapData';
 import { getForecastByCoordinates } from '@/services/weatherService';
@@ -26,8 +26,8 @@ describe('Funcionalidades Críticas', () => {
       longitude: -46.6333,
       descricao: 'Parque muito próximo',
       horario_funcionamento: '24h',
-      endereco: 'Próximo ao usuário',
-      contato: '(11) 1111-1111'
+      cidade: 'São Paulo',
+      uf: 'SP'
     },
     {
       id: '2',
@@ -37,8 +37,8 @@ describe('Funcionalidades Críticas', () => {
       longitude: -46.7000,
       descricao: 'Parque distante',
       horario_funcionamento: '6:00 - 18:00',
-      endereco: 'Longe do usuário',
-      contato: '(11) 2222-2222'
+      cidade: 'São Paulo',
+      uf: 'SP'
     }
   ];
 
