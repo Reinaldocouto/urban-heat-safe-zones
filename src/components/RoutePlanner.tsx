@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MapPin, Route, Clock, Thermometer, Navigation } from 'lucide-react';
 import { useGeolocation } from '@/hooks/useGeolocation';
@@ -9,11 +8,6 @@ const RoutePlanner: React.FC = () => {
   const [destino, setDestino] = useState('');
   const { latitude, longitude } = useGeolocation();
   const { toast } = useToast();
-
-  const validateCoordinates = (coords: string): boolean => {
-    const regex = /^-?\d+(\.\d+)?,\s*-?\d+(\.\d+)?$/;
-    return regex.test(coords.trim());
-  };
 
   const useCurrentLocation = () => {
     if (latitude && longitude) {
@@ -41,19 +35,11 @@ const RoutePlanner: React.FC = () => {
       return;
     }
 
-    if (!validateCoordinates(origem) || !validateCoordinates(destino)) {
-      toast({
-        title: 'Coordenadas inválidas',
-        description: 'Use o formato: latitude, longitude (ex: -23.5617, -46.6558)',
-        variant: 'destructive'
-      });
-      return;
-    }
-
-    const origemClean = origem.trim().replace(/\s+/g, '');
-    const destinoClean = destino.trim().replace(/\s+/g, '');
+    // Encode the addresses for URL
+    const origemEncoded = encodeURIComponent(origem.trim());
+    const destinoEncoded = encodeURIComponent(destino.trim());
     
-    const googleMapsUrl = `https://www.google.com/maps/dir/${origemClean}/${destinoClean}`;
+    const googleMapsUrl = `https://www.google.com/maps/dir/${origemEncoded}/${destinoEncoded}`;
     
     window.open(googleMapsUrl, '_blank');
     
@@ -76,14 +62,14 @@ const RoutePlanner: React.FC = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <MapPin className="inline h-4 w-4 mr-1" />
-                Origem (Coordenadas)
+                Origem
               </label>
               <div className="flex space-x-2">
                 <input
                   type="text"
                   value={origem}
                   onChange={(e) => setOrigem(e.target.value)}
-                  placeholder="Ex: -23.5617, -46.6558"
+                  placeholder="Ex: Parque do Ibirapuera, Avenida Paulista 1100"
                   className="flex-1 p-3 border border-gray-300 rounded-md focus:ring-fiap-red focus:border-fiap-red"
                 />
                 <button
@@ -99,13 +85,13 @@ const RoutePlanner: React.FC = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 <MapPin className="inline h-4 w-4 mr-1" />
-                Destino (Coordenadas)
+                Destino
               </label>
               <input
                 type="text"
                 value={destino}
                 onChange={(e) => setDestino(e.target.value)}
-                placeholder="Ex: -23.5505, -46.6333"
+                placeholder="Ex: Museu do Ipiranga, Parque do Carmo"
                 className="w-full p-3 border border-gray-300 rounded-md focus:ring-fiap-red focus:border-fiap-red"
               />
             </div>
