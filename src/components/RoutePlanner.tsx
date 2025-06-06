@@ -1,24 +1,10 @@
 
 import React, { useState } from 'react';
 import { MapPin, Route, Clock, Thermometer } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
-import AuthRequiredAlert from './AuthRequiredAlert';
 
 const RoutePlanner: React.FC = () => {
   const [origem, setOrigem] = useState('');
   const [destino, setDestino] = useState('');
-  const { user } = useAuth();
-
-  if (!user) {
-    return (
-      <div className="p-6 max-w-4xl mx-auto">
-        <AuthRequiredAlert 
-          message="Para planejar rotas térmicas personalizadas, você precisa estar logado em sua conta."
-          feature="Planejamento de Rotas"
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -93,10 +79,11 @@ const RoutePlanner: React.FC = () => {
           </div>
         </div>
         
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-          <p className="text-sm text-blue-800">
-            <strong>Em desenvolvimento:</strong> A funcionalidade de roteamento térmico inteligente será implementada em breve, 
-            integrando dados meteorológicos em tempo real com algoritmos de otimização de rotas.
+        <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+          <p className="text-sm text-green-800">
+            <strong>Funcionalidade disponível para todos:</strong> Agora qualquer usuário pode planejar rotas térmicas 
+            inteligentes. A funcionalidade completa será implementada em breve, integrando dados meteorológicos 
+            em tempo real com algoritmos de otimização de rotas.
           </p>
         </div>
       </div>

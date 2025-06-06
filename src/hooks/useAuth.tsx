@@ -33,7 +33,8 @@ export function useAuth() {
 
   const signUp = async (email: string, password: string, name: string) => {
     try {
-      const redirectUrl = `${window.location.origin}/`;
+      // Use the current app URL instead of localhost
+      const redirectUrl = window.location.origin;
       
       const { data, error } = await supabase.auth.signUp({
         email,
