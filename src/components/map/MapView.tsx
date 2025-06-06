@@ -1,6 +1,5 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
-
+import { Activity } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useGeolocation } from '@/hooks/useGeolocation';
 import { PontoResfriamento } from '@/services/supabaseService';
@@ -8,21 +7,31 @@ import { findNearestPoint } from '@/utils/distance';
 import { useMapData } from '@/hooks/useMapData';
 import { calculateOptimalRoute, OptimizedRoute } from '@/services/routeService';
 import { getForecastByCoordinates, ForecastData } from '@/services/weatherService';
+import { Button } from '@/components/ui/button';
 import MapControls from './MapControls';
 import WeatherNotification from './WeatherNotification';
 import InteractiveMapArea from './InteractiveMapArea';
 import PointDetailsPanel from './PointDetailsPanel';
 import RouteInfoPanel from './RouteInfoPanel';
+import WeatherSafetyPanel from '../weather/WeatherSafetyPanel';
 
 const MapView = () => {
   const [selectedPoint, setSelectedPoint] = useState<PontoResfriamento | null>(null);
   const [currentWeather, setCurrentWeather] = useState<ForecastData | null>(null);
   const [optimizedRoute, setOptimizedRoute] = useState<OptimizedRoute | null>(null);
   const [isCalculatingRoute, setIsCalculatingRoute] = useState(false);
+  const [isWeatherPanelOpen, setIsWeatherPanelOpen] = useState(false);
 
   const { latitude: userLat, longitude: userLon, loading: geoLoading, error: geoError } = useGeolocation();
   const { pontos, loading: dataLoading, error: dataError } = useMapData();
   const { toast } = useToast();
+
+  // Auto-open weather panel when geolocation is detected
+  useEffect(() => {
+    if (userLat && userLon && !geoError) {
+      setIsWeatherPanelOpen(true);
+    }
+  }, [userLat, userLon, geoError]);
 
   // Load weather data when user location is available
   useEffect(() => {
@@ -117,46 +126,69 @@ const MapView = () => {
   };
 
   return (
-    <div className="h-full flex flex-col lg:flex-row">
-      <div className="flex-1 relative">
-        {/* Área principal do mapa interativo */}
-        <InteractiveMapArea 
-          pontos={pontos}
-          onPointSelect={handlePointSelect}
-          selectedPoint={selectedPoint}
-        />
+    <div className="h-full flex flex-col">
+      <div className="flex-1 relative flex">
+        {/* Main map area */}
+        <div className={`flex-1 transition-all duration-300 ${isWeatherPanelOpen ? 'mr-96' : ''}`}>
+          <InteractiveMapArea 
+            pontos={pontos}
+            onPointSelect={handlePointSelect}
+            selectedPoint={selectedPoint}
+          />
 
-        <MapControls 
-          onFindNearest={handleFindNearest}
-          onCalculateRoute={handleCalculateOptimalRoute}
-          disabled={!userLat || !userLon || geoLoading}
-          isCalculatingRoute={isCalculatingRoute}
-          hasSelectedPoint={!!selectedPoint}
-        />
+          <MapControls 
+            onFindNearest={handleFindNearest}
+            onCalculateRoute={handleCalculateOptimalRoute}
+            disabled={!userLat || !userLon || geoLoading}
+            isCalculatingRoute={isCalculatingRoute}
+            hasSelectedPoint={!!selectedPoint}
+          />
 
-        <WeatherNotification />
+          {/* Weather Panel Toggle Button */}
+          {userLat && userLon && !geoError && (
+            <div className="absolute top-4 right-4 z-40">
+              <Button
+                onClick={() => setIsWeatherPanelOpen(!isWeatherPanelOpen)}
+                className="bg-fiap-red hover:bg-fiap-red/90 text-white shadow-lg"
+                size="sm"
+              >
+                <Activity className="h-4 w-4 mr-2" />
+                {isWeatherPanelOpen ? 'Fechar' : 'Clima Seguro'}
+              </Button>
+            </div>
+          )}
+
+          <WeatherNotification />
+        </div>
+
+        {/* Side panels container */}
+        <div className="flex flex-col">
+          {selectedPoint && (
+            <PointDetailsPanel 
+              point={selectedPoint} 
+              onClose={() => {
+                setSelectedPoint(null);
+                setOptimizedRoute(null);
+              }}
+              currentWeather={currentWeather}
+              userLocation={userLat && userLon ? { lat: userLat, lon: userLon } : undefined}
+            />
+          )}
+          
+          {optimizedRoute && (
+            <RouteInfoPanel 
+              route={optimizedRoute}
+              onClose={() => setOptimizedRoute(null)}
+            />
+          )}
+        </div>
       </div>
 
-      <div className="flex flex-col lg:w-96">
-        {selectedPoint && (
-          <PointDetailsPanel 
-            point={selectedPoint} 
-            onClose={() => {
-              setSelectedPoint(null);
-              setOptimizedRoute(null);
-            }}
-            currentWeather={currentWeather}
-            userLocation={userLat && userLon ? { lat: userLat, lon: userLon } : undefined}
-          />
-        )}
-        
-        {optimizedRoute && (
-          <RouteInfoPanel 
-            route={optimizedRoute}
-            onClose={() => setOptimizedRoute(null)}
-          />
-        )}
-      </div>
+      {/* Weather Safety Panel */}
+      <WeatherSafetyPanel 
+        isOpen={isWeatherPanelOpen}
+        onClose={() => setIsWeatherPanelOpen(false)}
+      />
 
       {(dataLoading || geoLoading || isCalculatingRoute) && (
         <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-50">
