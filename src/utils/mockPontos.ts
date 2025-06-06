@@ -1,5 +1,6 @@
 
 import type { PontoResfriamento } from '@/services/supabaseService';
+import { additionalPontos } from './additionalPontos';
 
 export const mockPontos: PontoResfriamento[] = [
   {
@@ -67,5 +68,7 @@ export const mockPontos: PontoResfriamento[] = [
     horario_funcionamento: '07:00 - 19:00',
     cidade: 'São Paulo',
     uf: 'SP',
-  }
+  },
+  // Adding all additional points
+  ...additionalPontos
 ];
