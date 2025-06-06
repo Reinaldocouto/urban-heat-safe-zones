@@ -91,6 +91,37 @@
   }
 }
 
+/* Custom FIAP Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--fiap-gray-light));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--fiap-red));
+  border-radius: 4px;
+  border: 1px solid hsl(var(--fiap-gray-light));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--fiap-red) / 0.8);
+}
+
+::-webkit-scrollbar-corner {
+  background: hsl(var(--fiap-gray-light));
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--fiap-red)) hsl(var(--fiap-gray-light));
+}
+
 /* Custom FIAP Colors */
 .text-fiap-red {
   color: hsl(var(--fiap-red));
@@ -128,6 +159,24 @@
   border-color: hsl(var(--fiap-red));
 }
 
+.border-fiap-red\/20 {
+  border-color: hsl(var(--fiap-red) / 0.2);
+}
+
+/* FIAP Enhanced UI Elements */
+.fiap-gradient {
+  background: linear-gradient(135deg, hsl(var(--fiap-red)), hsl(var(--fiap-red) / 0.8));
+}
+
+.fiap-glow {
+  box-shadow: 0 0 20px hsl(var(--fiap-red) / 0.3);
+}
+
+.fiap-border-glow {
+  border: 2px solid hsl(var(--fiap-red) / 0.3);
+  box-shadow: 0 0 10px hsl(var(--fiap-red) / 0.2);
+}
+
 /* MapLibre GL CSS customizations */
 .maplibregl-map {
   width: 100%;
@@ -145,6 +194,7 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   background: white;
+  border: 2px solid hsl(var(--fiap-red) / 0.1);
 }
 
 .maplibregl-popup-tip {
@@ -155,34 +205,39 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   background: white;
+  border: 1px solid hsl(var(--fiap-red) / 0.1);
 }
 
 .maplibregl-ctrl button {
   border-radius: 6px;
   background: white;
+  transition: all 0.2s ease;
 }
 
 .maplibregl-ctrl button:hover {
-  background-color: #f3f4f6;
+  background-color: hsl(var(--fiap-red) / 0.1);
+  transform: scale(1.02);
 }
 
 /* STATIC cooling point marker styles - SEM hover effects */
 .static-cooling-marker {
   pointer-events: auto !important;
-  transition: none !important; /* Remove todas as transições */
+  transition: none !important;
 }
 
 /* Ensure MapLibre markers are properly positioned - SEM modificações dinâmicas */
 .maplibregl-marker {
-  will-change: auto; /* Remove will-change que pode causar problemas */
+  will-change: auto;
   pointer-events: auto;
 }
 
 /* MapLibre attribution */
 .maplibregl-ctrl-attrib {
   font-size: 10px;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
   margin: 0;
+  border: 1px solid hsl(var(--fiap-red) / 0.1);
+  border-radius: 4px;
 }
 
 /* Ensure proper z-index stacking */
@@ -197,4 +252,37 @@
 
 .maplibregl-control-container > * {
   pointer-events: auto;
+}
+
+/* Enhanced loading animations with FIAP colors */
+@keyframes fiap-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
+.fiap-pulse {
+  animation: fiap-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Enhanced button styles */
+.fiap-button {
+  background: linear-gradient(135deg, hsl(var(--fiap-red)), hsl(var(--fiap-red) / 0.9));
+  border: 2px solid white;
+  box-shadow: 0 4px 12px hsl(var(--fiap-red) / 0.3);
+  transition: all 0.2s ease;
+}
+
+.fiap-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px hsl(var(--fiap-red) / 0.4);
+}
+
+.fiap-button:active {
+  transform: translateY(0);
 }

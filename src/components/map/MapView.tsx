@@ -14,6 +14,7 @@ import InteractiveMapArea from './InteractiveMapArea';
 import PointDetailsPanel from './PointDetailsPanel';
 import RouteInfoPanel from './RouteInfoPanel';
 import WeatherSafetyPanel from '../weather/WeatherSafetyPanel';
+import CurrentWeatherWidget from './CurrentWeatherWidget';
 
 const MapView = () => {
   const [selectedPoint, setSelectedPoint] = useState<PontoResfriamento | null>(null);
@@ -126,7 +127,7 @@ const MapView = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-fiap-gray-light">
       <div className="flex-1 relative flex">
         {/* Main map area */}
         <div className={`flex-1 transition-all duration-300 ${isWeatherPanelOpen ? 'mr-96' : ''}`}>
@@ -136,24 +137,35 @@ const MapView = () => {
             selectedPoint={selectedPoint}
           />
 
-          <MapControls 
-            onFindNearest={handleFindNearest}
-            onCalculateRoute={handleCalculateOptimalRoute}
-            disabled={!userLat || !userLon || geoLoading}
-            isCalculatingRoute={isCalculatingRoute}
-            hasSelectedPoint={!!selectedPoint}
-          />
+          {/* Map Controls - top left */}
+          <div className="absolute top-4 left-4 z-20 space-y-3">
+            <MapControls 
+              onFindNearest={handleFindNearest}
+              onCalculateRoute={handleCalculateOptimalRoute}
+              disabled={!userLat || !userLon || geoLoading}
+              isCalculatingRoute={isCalculatingRoute}
+              hasSelectedPoint={!!selectedPoint}
+            />
 
-          {/* Weather Panel Toggle Button */}
+            {/* Current Weather Widget - moved below route button */}
+            {userLat && userLon && !geoError && currentWeather && (
+              <CurrentWeatherWidget 
+                weatherData={currentWeather}
+                isCompact={true}
+              />
+            )}
+          </div>
+
+          {/* Weather Panel Toggle Button - top right */}
           {userLat && userLon && !geoError && (
-            <div className="absolute top-4 right-4 z-40">
+            <div className="absolute top-4 right-4 z-20">
               <Button
                 onClick={() => setIsWeatherPanelOpen(!isWeatherPanelOpen)}
-                className="bg-fiap-red hover:bg-fiap-red/90 text-white shadow-lg"
+                className="bg-fiap-red hover:bg-fiap-red/90 text-white shadow-lg border-2 border-white/20 backdrop-blur-sm"
                 size="sm"
               >
                 <Activity className="h-4 w-4 mr-2" />
-                {isWeatherPanelOpen ? 'Fechar' : 'Clima Seguro'}
+                {isWeatherPanelOpen ? 'Fechar Painel' : 'Clima Seguro'}
               </Button>
             </div>
           )}
@@ -192,9 +204,9 @@ const MapView = () => {
 
       {(dataLoading || geoLoading || isCalculatingRoute) && (
         <div className="absolute inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="text-center">
+          <div className="text-center bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-fiap-red/20">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-fiap-red mx-auto"></div>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-3 text-sm text-gray-700 font-medium">
               {isCalculatingRoute ? 'Calculando rota térmica...' : 
                geoLoading ? 'Obtendo localização...' : 'Carregando pontos...'}
             </p>
@@ -203,7 +215,7 @@ const MapView = () => {
       )}
 
       {(dataError || geoError) && (
-        <div className="absolute top-20 left-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded z-50">
+        <div className="absolute top-20 left-4 right-4 bg-red-50 border-2 border-red-200 text-red-800 px-4 py-3 rounded-lg z-50 shadow-lg backdrop-blur-sm">
           <strong>Aviso:</strong> {dataError || geoError}
         </div>
       )}

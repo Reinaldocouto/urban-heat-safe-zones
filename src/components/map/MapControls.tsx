@@ -18,33 +18,29 @@ const MapControls: React.FC<MapControlsProps> = ({
   hasSelectedPoint = false
 }) => {
   return (
-    <div className="absolute top-4 left-4 z-10 space-y-2">
+    <div className="space-y-3 w-64">
       <button
         onClick={onFindNearest}
         disabled={disabled}
-        className="bg-fiap-red text-white py-2 px-4 rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-fiap-red/90 transition-colors flex items-center space-x-2 w-full"
+        className="fiap-button text-white py-3 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center space-x-2 w-full font-medium"
       >
         <MapPin className="h-4 w-4" />
-        <span className="hidden sm:inline">Encontrar mais próximo</span>
-        <span className="sm:hidden">Próximo</span>
+        <span>Encontrar mais próximo</span>
       </button>
       
       {onCalculateRoute && (
         <button
           onClick={onCalculateRoute}
           disabled={disabled || !hasSelectedPoint || isCalculatingRoute}
-          className="bg-blue-600 text-white py-2 px-4 rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700 transition-colors flex items-center space-x-2 w-full"
+          className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-4 rounded-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed hover:from-blue-700 hover:to-blue-800 transition-all duration-200 hover:transform hover:-translate-y-0.5 hover:shadow-xl flex items-center space-x-2 w-full font-medium border-2 border-white/20"
         >
           {isCalculatingRoute ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
             <Route className="h-4 w-4" />
           )}
-          <span className="hidden sm:inline">
-            {isCalculatingRoute ? 'Calculando...' : 'Rota térmica'}
-          </span>
-          <span className="sm:hidden">
-            {isCalculatingRoute ? 'Calc...' : 'Rota'}
+          <span>
+            {isCalculatingRoute ? 'Calculando rota...' : 'Rota térmica'}
           </span>
         </button>
       )}
