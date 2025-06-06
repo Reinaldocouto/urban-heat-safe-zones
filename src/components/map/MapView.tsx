@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { Activity } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -10,7 +9,6 @@ import { calculateOptimalRoute, OptimizedRoute } from '@/services/routeService';
 import { getForecastByCoordinates, ForecastData } from '@/services/weatherService';
 import { Button } from '@/components/ui/button';
 import MapControls from './MapControls';
-import WeatherNotification from './WeatherNotification';
 import InteractiveMapArea from './InteractiveMapArea';
 import PointDetailsPanel from './PointDetailsPanel';
 import RouteInfoPanel from './RouteInfoPanel';
@@ -173,7 +171,6 @@ const MapView = () => {
             </div>
           )}
 
-          <WeatherNotification />
         </div>
 
         {/* Side panels container */}
